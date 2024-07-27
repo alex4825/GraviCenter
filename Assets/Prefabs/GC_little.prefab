@@ -343,6 +343,7 @@ GameObject:
   - component: {fileID: 848180053577456410}
   - component: {fileID: -1403864127311072162}
   - component: {fileID: -7922145159201256944}
+  - component: {fileID: -3602903877405174525}
   m_Layer: 0
   m_Name: GC_little
   m_TagString: Untagged
@@ -381,7 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c1d35d77e036d2479292b89860497b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityPower: 5
+  gravityPower: 20
 --- !u!135 &-7922145159201256944
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -403,3 +404,15 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &-3602903877405174525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8180266850221256439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c268f51b5bd0e9346b6d2572ea574709, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -7,19 +7,29 @@ public class GraviCenterManager : MonoBehaviour
 {
     private GameObject player;
     private Rigidbody rbPlayer;
-    public float gravityPower = 10f;
 
-    // Start is called before the first frame update
+    public float gravityPower = 25f;
+
+
     void Start()
     {
         player = GameObject.Find("playerBall");
         rbPlayer = player.GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
+    {
+        if (DistanceToGC() < 10)
+        {
+            MoveBall();
+        }
+    }
+
+    private void MoveBall()
     {
         Vector3 direction = (transform.position - player.transform.position).normalized;
         rbPlayer.AddForce(direction * gravityPower);
     }
+    public float DistanceToGC() => (transform.position - player.transform.position).magnitude;
+
 }
