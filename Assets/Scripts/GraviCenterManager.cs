@@ -9,7 +9,7 @@ public class GraviCenterManager : MonoBehaviour
     private Rigidbody rbPlayer;
 
     public float gravityPower = 25f;
-
+    public float gravityZone = 10f;
 
     void Start()
     {
