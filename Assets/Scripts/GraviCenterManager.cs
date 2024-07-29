@@ -19,7 +19,7 @@ public class GraviCenterManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (DistanceToGC() < 10)
+        if (DistanceToGC() < gravityZone)
         {
             MoveBall();
         }
@@ -30,6 +30,6 @@ public class GraviCenterManager : MonoBehaviour
         Vector3 direction = (transform.position - player.transform.position).normalized;
         rbPlayer.AddForce(direction * gravityPower);
     }
-    public float DistanceToGC() => (transform.position - player.transform.position).magnitude;
+    public float DistanceToGC() => (transform.position - player.transform.position).magnitude * 2;
 
 }
