@@ -25,7 +25,6 @@ public class GraviCenterManager : MonoBehaviour
             MoveBall();
         }
     }
-
     private void MoveBall()
     {
         //the closer from the ball to GC, the stronger gravitation 
@@ -35,4 +34,18 @@ public class GraviCenterManager : MonoBehaviour
     }
     public float DistanceToGC() => (transform.position - player.transform.position).magnitude * 2;
 
+    private void OnEnable()
+    {
+        TileSelector.OnSurfaceSelected += PlaceGC;
+    }
+    private void OnDisable()
+    {
+        TileSelector.OnSurfaceSelected -= PlaceGC;
+    }
+
+    private void PlaceGC(Transform surfaceTransform)
+    {
+        transform.position = surfaceTransform.position;
+    }
+    
 }
