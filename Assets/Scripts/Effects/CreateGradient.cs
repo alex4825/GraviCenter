@@ -8,39 +8,38 @@ public class CreateGradient : MonoBehaviour
     public int textureSize = 256;
     public Gradient gradient;
 
-    void Start()
+    private void Start()
     {
         Texture2D texture = new Texture2D(textureSize, textureSize);
-        // Центр текстуры
+
         Vector2 center = new Vector2(textureSize / 2f, textureSize / 2f);
 
-        // Максимальное расстояние от центра (радиус круга)
+        // Maximum distance from the center (radius of the circle)
         float maxDist = Vector2.Distance(Vector2.zero, center);
 
         for (int y = 0; y < texture.height; y++)
         {
             for (int x = 0; x < texture.width; x++)
             {
-                // Расстояние от текущего пикселя до центра
+                // The distance from the current pixel to the center
                 float dist = Vector2.Distance(new Vector2(x, y), center);
 
-                // Нормализация расстояния в диапазоне [0, 1]
+                // Normalization of the distance in the range [0, 1]
                 float t = Mathf.InverseLerp(0, maxDist, dist);
 
-                // Получение цвета из градиента на основе нормализованного расстояния
+                // Getting a color from a gradient based on a normalized distance
                 Color color = gradient.Evaluate(t);
 
-                // Установка цвета пикселя в текстуре
+                // Setting the pixel color in the texture
                 texture.SetPixel(x, y, color);
             }
         }
         texture.Apply();
 
-        
         byte[] bytes = texture.EncodeToPNG();
         File.WriteAllBytes(Application.dataPath + "/Textures/GradientTexture.png", bytes);
-        
-        // Применение текстуры к материалу
+
+        // Applying texture to  material
         GetComponent<Renderer>().material.mainTexture = texture;
     }
 }

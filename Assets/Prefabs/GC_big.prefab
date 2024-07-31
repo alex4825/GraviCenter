@@ -214,6 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityPower: 60
+  gravityZone: 30
 --- !u!135 &2911318048125683656
 SphereCollider:
   m_ObjectHideFlags: 0
