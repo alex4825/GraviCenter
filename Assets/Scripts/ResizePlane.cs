@@ -7,7 +7,7 @@ public class ResizePlane : MonoBehaviour
     void Start()
     {
         
-        float zoneSize = GetComponentInParent<GraviCenterManager>().gravityZone;
+        float zoneSize = GetComponentInParent<GraviCenter>().GravityZone;
 
         const float DEFAULT_SCALE = 10; //10 units
 

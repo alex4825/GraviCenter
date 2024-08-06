@@ -6,6 +6,7 @@ TagManager:
   tags:
   - GC
   - Surface
+  - GameManager
   layers:
   - Default
   - TransparentFX

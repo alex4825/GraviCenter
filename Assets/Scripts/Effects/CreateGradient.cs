@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class CreateGradient : MonoBehaviour
 {
-    public int textureSize = 256;
-    public Gradient gradient;
+    [SerializeField] int textureSize = 256;
+    [SerializeField] Gradient gradient;
 
     private void Start()
     {
