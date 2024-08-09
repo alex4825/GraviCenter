@@ -5,8 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - GC
-  - Surface
   - GameManager
+  - Level
+  - Floor
   layers:
   - Default
   - TransparentFX

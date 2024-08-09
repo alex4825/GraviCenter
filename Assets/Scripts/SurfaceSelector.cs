@@ -3,48 +3,48 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class SurfaceSelector : MonoBehaviour
+public class FloorSelector : MonoBehaviour
 {
-    private GameObject hoveredSurface;
-    private GameObject lastHoveredSurface;
+    private GameObject hoveredFloor;
+    private GameObject lastHoveredFloor;
     private float originalMetallicValue;
     private float hoverMetallicValue;
     private float rayDistance;
 
-    public GameObject HoveredSurface { get { return hoveredSurface; } set { hoveredSurface = value; } }
+    public GameObject HoveredFloor { get { return hoveredFloor; } set { hoveredFloor = value; } }
 
     private void Start()
     {
-        Material surfaceMaterial = GameObject.FindWithTag("Surface").GetComponent<Renderer>().material;
+        Material floorMaterial = GameObject.FindWithTag("Floor").GetComponent<Renderer>().material;
 
-        HoveredSurface = null;
-        lastHoveredSurface = null;
+        HoveredFloor = null;
+        lastHoveredFloor = null;
         hoverMetallicValue = 0f;
-        originalMetallicValue = surfaceMaterial.GetFloat("_Metallic");
+        originalMetallicValue = floorMaterial.GetFloat("_Metallic");
         rayDistance = 100f;
     }
 
     private void Update()
     {
-        hoveredSurface = GetSurface();
+        hoveredFloor = GetFloor();
 
-        //surface was found
-        if (hoveredSurface != null)
+        //floor was found
+        if (hoveredFloor != null)
         {
-            if (lastHoveredSurface != null)
+            if (lastHoveredFloor != null)
             {
-                DrawSurface(ref lastHoveredSurface, originalMetallicValue);
+                DrawFloor(ref lastHoveredFloor, originalMetallicValue);
             }
-            DrawSurface(ref hoveredSurface, hoverMetallicValue);
-            lastHoveredSurface = hoveredSurface;
+            DrawFloor(ref hoveredFloor, hoverMetallicValue);
+            lastHoveredFloor = hoveredFloor;
         }
-        else if (lastHoveredSurface != null)
+        else if (lastHoveredFloor != null)
         {
-            DrawSurface(ref lastHoveredSurface, originalMetallicValue);
-            lastHoveredSurface = null;
+            DrawFloor(ref lastHoveredFloor, originalMetallicValue);
+            lastHoveredFloor = null;
         }
     }
-    public GameObject GetSurface()
+    public GameObject GetFloor()
     {
         // Raycast from camera position to cursor position
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -53,8 +53,8 @@ public class SurfaceSelector : MonoBehaviour
 
         foreach (RaycastHit hit in hits)
         {
-            // Choose surface object which the ray crossed with        
-            if (hit.collider.gameObject.tag == "Surface")
+            // Choose floor object which the ray crossed with        
+            if (hit.collider.gameObject.tag == "Floor")
             {
                 return hit.collider.gameObject;
             }
@@ -62,9 +62,9 @@ public class SurfaceSelector : MonoBehaviour
         return null;
     }
 
-    private void DrawSurface(ref GameObject surface, float newMetallicValue)
+    private void DrawFloor(ref GameObject floor, float newMetallicValue)
     {
-        Renderer renderer = surface.GetComponent<Renderer>();
+        Renderer renderer = floor.GetComponent<Renderer>();
 
         if (renderer != null)
         {

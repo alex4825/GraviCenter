@@ -10,6 +10,7 @@ public class GraviCenter : MonoBehaviour
     private Rigidbody rbPlayer;
     private bool isSearchingPlace;
     private bool isPlaceFound;
+    private float transparency = 0.1f;
 
     [SerializeField] float gravityPower = 20f;
     [SerializeField] float gravityZone = 10f;
@@ -19,23 +20,25 @@ public class GraviCenter : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("playerBall");
+        player = FindObjectOfType<PlayerController>().gameObject;
         rbPlayer = player.GetComponent<Rigidbody>();
+        GetComponent<MaterialChanger>().SetTransparency(transparency);
         isSearchingPlace = true;
         isPlaceFound = false;
     }
 
     private void Update()
-    {
+    { 
         if (isSearchingPlace)
         {
             if (Input.GetMouseButtonUp(0))
             {
-                GameObject surface = GameObject.FindWithTag("GameManager").GetComponent<SurfaceSelector>().GetSurface();
+                GameObject floor = GameObject.FindWithTag("GameManager").GetComponent<FloorSelector>().GetFloor();
 
-                if (surface != null)
+                if (floor != null)
                 {
-                    PlaceGC(surface.transform);
+                    PlaceGC(floor.transform);
+                    GetComponent<MaterialChanger>().SetTransparency(1);
                 }
                 else
                 {
@@ -69,6 +72,7 @@ public class GraviCenter : MonoBehaviour
         Vector3 direction = (transform.position - player.transform.position).normalized;
         rbPlayer.AddForce(direction * gravityPower * powerDivider);
     }
-    private void PlaceGC(Transform surfaceTransform) => transform.position = surfaceTransform.position;
+    private void PlaceGC(Transform floorTransform) => transform.position = floorTransform.position;
+
 
 }
