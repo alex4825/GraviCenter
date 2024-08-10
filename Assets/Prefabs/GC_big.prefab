@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 1614295934143137252}
   - component: {fileID: 4366828755454127048}
   - component: {fileID: -6490866761306289107}
+  - component: {fileID: -5559453316206923245}
   m_Layer: 0
   m_Name: GC_big
-  m_TagString: Untagged
+  m_TagString: GC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,6 +86,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0e51f35998650478a7b5561be03b8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5559453316206923245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906218619314368103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10f9cf36403264645afbb646a8bbfbc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rayDistance: 100
 --- !u!1 &1873795041221266266
 GameObject:
   m_ObjectHideFlags: 0

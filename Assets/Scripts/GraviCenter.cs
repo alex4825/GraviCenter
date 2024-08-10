@@ -33,11 +33,11 @@ public class GraviCenter : MonoBehaviour
         {
             if (Input.GetMouseButtonUp(0))
             {
-                GameObject floor = GameObject.FindWithTag("GameManager").GetComponent<FloorSelector>().GetFloor();
+                GameObject floor = GetComponent<RaycastManager>().GetRaycastObject("Floor");
 
                 if (floor != null)
                 {
-                    PlaceGC(floor.transform);
+                    SetTransformGC(floor.transform);
                     GetComponent<MaterialChanger>().SetTransparency(1);
                 }
                 else
@@ -52,6 +52,18 @@ public class GraviCenter : MonoBehaviour
         else if (GetDistanceToGC() < GravityZone)
         {
             MoveBall();
+        }
+
+        //Alt + left mouse click => destroy this GC
+        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
+        {
+            if (Input.GetMouseButton(0))
+            {
+               if (GetComponent<RaycastManager>().GetRaycastObject("GC") == gameObject)
+                {
+                    Destroy(gameObject);
+                }
+            }
         }
     }
 
@@ -72,7 +84,6 @@ public class GraviCenter : MonoBehaviour
         Vector3 direction = (transform.position - player.transform.position).normalized;
         rbPlayer.AddForce(direction * gravityPower * powerDivider);
     }
-    private void PlaceGC(Transform floorTransform) => transform.position = floorTransform.position;
-
+    private void SetTransformGC(Transform floorTransform) => transform.position = floorTransform.position;
 
 }
