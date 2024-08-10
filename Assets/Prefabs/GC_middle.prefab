@@ -399,6 +399,8 @@ MonoBehaviour:
   gravityPower: 60
   gravityZone: 20
   distanceFromCamera: 10
+  energyExplosion: 50
+  energyCost: 200
 --- !u!135 &1293326113100936775
 SphereCollider:
   m_ObjectHideFlags: 0
