@@ -10,11 +10,13 @@ public class FloorChecker : MonoBehaviour
     private void OnEnable()
     {
         //all floors are free after game starting
-        floorTransforms = FindPositions();
+        floorTransforms = FindTransforms();
     }
 
-    private List<Transform> FindPositions()
+    private List<Transform> FindTransforms()
     {
+        List<Transform> transforms = new List<Transform>();
+
         string floorTag = "Floor";
 
         Transform[] allChildren = GetComponentsInChildren<Transform>();
@@ -23,10 +25,10 @@ public class FloorChecker : MonoBehaviour
         {
             if (child.gameObject.CompareTag(floorTag))
             {
-                floorTransforms.Add(child.gameObject.transform);
+                transforms.Add(child.gameObject.transform);
             }
         }
-        return floorTransforms;
+        return transforms;
     }
 
     public void Draw(ref GameObject floor, float newMetallicValue)
