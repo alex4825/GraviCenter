@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1689312100520082152}
   - component: {fileID: 4350408766307569601}
   - component: {fileID: 3299669350533737313}
-  - component: {fileID: 4387874772552269633}
   - component: {fileID: -4298478389476025626}
   m_Layer: 0
   m_Name: Semi-block_4_hook
@@ -86,27 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4387874772552269633
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4437858048495415164}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 0.9999999, z: 0.47499987}
-  m_Center: {x: 0, y: 0, z: -0.26249993}
 --- !u!65 &-4298478389476025626
 BoxCollider:
   m_ObjectHideFlags: 0
