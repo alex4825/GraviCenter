@@ -32,14 +32,14 @@ public class FloorSelector : MonoBehaviour
         {
             if (lastHoveredFloor != null)
             {
-                GetComponent<FloorChecker>().Draw(ref lastHoveredFloor, originalMetallicValue);
+                MaterialChanger.ChangeMetallic(ref lastHoveredFloor, originalMetallicValue);
             }
-            GetComponent<FloorChecker>().Draw(ref hoveredFloor, hoverMetallicValue);
+            MaterialChanger.ChangeMetallic(ref hoveredFloor, hoverMetallicValue);
             lastHoveredFloor = hoveredFloor;
         }
         else if (lastHoveredFloor != null)
         {
-            GetComponent<FloorChecker>().Draw(ref lastHoveredFloor, originalMetallicValue);
+            MaterialChanger.ChangeMetallic(ref lastHoveredFloor, originalMetallicValue);
             lastHoveredFloor = null;
         }
     }

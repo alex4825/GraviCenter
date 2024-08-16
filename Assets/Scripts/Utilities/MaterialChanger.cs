@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MaterialChanger : MonoBehaviour
+public static class MaterialChanger
 {
-    public void SetTransparency(float alpha)
+    public static void SetTransparency(GameObject obj, float alpha)
     {
-        GameObject obj = this.gameObject;
-
         Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
 
         foreach (Renderer renderer in renderers)
@@ -24,12 +22,21 @@ public class MaterialChanger : MonoBehaviour
         }
     }
 
-    private void SetEmission(ref Material material, float alpha)
+    private static void SetEmission(ref Material material, float alpha)
     {
         if (alpha == 1 && !material.IsKeywordEnabled("_EMISSION"))
             material.EnableKeyword("_EMISSION");
         else
             material.DisableKeyword("_EMISSION");
-
     }
+    public static void ChangeMetallic(ref GameObject floor, float newMetallicValue)
+    {
+        Renderer renderer = floor.GetComponent<Renderer>();
+
+        if (renderer != null)
+        {
+            renderer.material.SetFloat("_Metallic", newMetallicValue);
+        }
+    }
+
 }

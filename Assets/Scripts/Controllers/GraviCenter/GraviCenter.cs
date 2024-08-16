@@ -21,15 +21,15 @@ public class GraviCenter : MonoBehaviour
 
     public float GravityZone { get { return gravityZone; } set { gravityZone = value; } }
 
-    public delegate void GraviCenterDestroyedAction(int energyValue);
-    public static event GraviCenterDestroyedAction OnGraviCenterDestroyed;
-    public static event GraviCenterDestroyedAction OnGraviCenterCreated;
+    public delegate void GraviCenterAction(int energyValue);
+    public static event GraviCenterAction OnGraviCenterDestroyed;
+    public static event GraviCenterAction OnGraviCenterCreated;
 
     private void Start()
     {
         player = FindObjectOfType<PlayerController>().gameObject;
         rbPlayer = player.GetComponent<Rigidbody>();
-        GetComponent<MaterialChanger>().SetTransparency(transparency);
+        MaterialChanger.SetTransparency(gameObject, transparency);
         isSearchingPlace = true;
         isPlaceFound = false;
         energyExplosion = energyCost / 2;
@@ -53,7 +53,7 @@ public class GraviCenter : MonoBehaviour
                     SetTransformGC(floor.transform);
                     avalibleTransforms.Remove(floor.transform);
                     OnGraviCenterCreated?.Invoke(-energyCost);
-                    GetComponent<MaterialChanger>().SetTransparency(1);
+                    MaterialChanger.SetTransparency(gameObject, 1);
                 }
                 else
                 {

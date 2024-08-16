@@ -27,7 +27,7 @@ public class LevelManager : MonoBehaviour
     {
         PlayerController.OnEnergyPickedUp -= ChangeEnergyAmount;
         GraviCenter.OnGraviCenterDestroyed -= ChangeEnergyAmount;
-        GraviCenter.OnGraviCenterCreated += ChangeEnergyAmount;
+        GraviCenter.OnGraviCenterCreated -= ChangeEnergyAmount;
     }
 
     private void ChangeEnergyAmount(int energySummand)
@@ -38,7 +38,7 @@ public class LevelManager : MonoBehaviour
 
     private void SetRandomPositions(GameObject prefab, int nums)
     {
-        List<Transform> floorTransforms = GetComponent<FloorChecker>().FloorTransforms;
+        List<Transform> floorTransforms = GetComponent<FloorChecker>().FindTransforms();
 
         for (int i = 0; i < nums; i++)
         {

@@ -13,7 +13,7 @@ public class FloorChecker : MonoBehaviour
         floorTransforms = FindTransforms();
     }
 
-    private List<Transform> FindTransforms()
+    public List<Transform> FindTransforms()
     {
         List<Transform> transforms = new List<Transform>();
 
@@ -31,13 +31,5 @@ public class FloorChecker : MonoBehaviour
         return transforms;
     }
 
-    public void Draw(ref GameObject floor, float newMetallicValue)
-    {
-        Renderer renderer = floor.GetComponent<Renderer>();
 
-        if (renderer != null)
-        {
-            renderer.material.SetFloat("_Metallic", newMetallicValue);
-        }
-    }
 }

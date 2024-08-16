@@ -439,7 +439,6 @@ GameObject:
   - component: {fileID: 230337563738799162}
   - component: {fileID: 6928025957718636340}
   - component: {fileID: 7869062219275420245}
-  - component: {fileID: 860518868926432927}
   - component: {fileID: 7495508912676587106}
   m_Layer: 0
   m_Name: GC_little
@@ -483,6 +482,7 @@ MonoBehaviour:
   gravityPower: 30
   gravityZone: 10
   distanceFromCamera: 10
+  energyCost: 100
 --- !u!135 &7869062219275420245
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -504,18 +504,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &860518868926432927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6260532517220163855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0e51f35998650478a7b5561be03b8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7495508912676587106
 MonoBehaviour:
   m_ObjectHideFlags: 0
