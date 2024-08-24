@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public int CurrentLevel { get; set; }
-    void Start()
+    static public LevelManager CurrentLevel { get; set; }
+    void OnEnable()
     {
-        CurrentLevel = 1;
+        CurrentLevel = FindFirstObjectByType<LevelManager>();
     }
 
     void Update()

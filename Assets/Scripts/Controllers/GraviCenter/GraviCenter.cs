@@ -43,15 +43,13 @@ public class GraviCenter : MonoBehaviour
             {
                 GameObject floor = GetComponent<RaycastTracker>().GetRaycastObject("Floor");
 
-                LevelManager currentLevel = FindFirstObjectByType<LevelManager>();
-
-                List<Transform> avalibleTransforms = currentLevel.GetComponent<FloorChecker>().FloorTransforms;
+                LevelManager currentLevel = GameManager.CurrentLevel;
 
                 if (floor != null && currentLevel.EnergyAmount >= energyCost
-                    && avalibleTransforms.Contains(floor.transform))
+                    && currentLevel.Floors.Contains(floor.transform))
                 {
                     SetTransformGC(floor.transform);
-                    avalibleTransforms.Remove(floor.transform);
+                    currentLevel.Floors.Remove(floor.transform);
                     OnGraviCenterCreated?.Invoke(-energyCost);
                     MaterialChanger.SetTransparency(gameObject, 1);
                 }
@@ -77,6 +75,7 @@ public class GraviCenter : MonoBehaviour
             {
                if (GetComponent<RaycastTracker>().GetRaycastObject("GC") == gameObject)
                 {
+                    GameManager.CurrentLevel.Floors.Add(gameObject.transform);
                     OnGraviCenterDestroyed?.Invoke(energyExplosion);
                     Destroy(gameObject);
                 }

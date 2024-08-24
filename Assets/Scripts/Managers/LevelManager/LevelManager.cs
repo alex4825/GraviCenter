@@ -11,10 +11,13 @@ public class LevelManager : MonoBehaviour
     [SerializeField] int energyAmount = 150;
     [SerializeField] int energyNums = 5;
 
+    public List<Transform> Floors { get; set; }
     public int EnergyAmount { get { return energyAmount; } set { energyAmount = value; } }
 
     private void OnEnable()
     {
+        Floors = FloorChecker.FindFloors();
+
         energyAmountTMP.text = energyAmount.ToString();
         SetRandomPositions(energyPrefab, energyNums);
 
@@ -38,17 +41,16 @@ public class LevelManager : MonoBehaviour
 
     private void SetRandomPositions(GameObject prefab, int nums)
     {
-        List<Transform> floorTransforms = GetComponent<FloorChecker>().FindTransforms();
 
         for (int i = 0; i < nums; i++)
         {
-            int randIndex = Random.Range(0, floorTransforms.Count);
+            int randIndex = Random.Range(0, Floors.Count);
 
-            GameObject obj = Instantiate(prefab, floorTransforms[randIndex].transform.position, Quaternion.identity);
+            GameObject obj = Instantiate(prefab, Floors[randIndex].transform.position, Quaternion.identity);
             obj.transform.position.Set(obj.transform.position.x, obj.transform.position.y - 0.25f, obj.transform.position.z);
 
             //delete the element to avoid repetitions
-            floorTransforms.RemoveAt(randIndex);
+            Floors.RemoveAt(randIndex);
         }
     }
 
