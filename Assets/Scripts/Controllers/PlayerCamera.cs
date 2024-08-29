@@ -12,6 +12,7 @@ public class PlayerCamera : MonoBehaviour
         private GameObject obj;
         private List<GameObject> obstacles;
         private float alpha = 0.1f;
+        public GameObject Obj { get { return obj; } }
         public XrayTarget(GameObject targetObject)
         {
             obj = targetObject;
@@ -21,7 +22,6 @@ public class PlayerCamera : MonoBehaviour
         public void UpdateObstacles()
         {
             List<GameObject> currentObstacles = RaycastTracker.GetRaycastObjects(obj.transform);
-
 
             for (int i = 0; i < obstacles.Count; i++)
             {
@@ -39,8 +39,23 @@ public class PlayerCamera : MonoBehaviour
                     continue;
 
                 MaterialChanger.SetTransparency(currentObstacles[i], alpha);
-                obstacles.Add(currentObstacles[i]);                
+                obstacles.Add(currentObstacles[i]);
             }
+        }
+
+        public void UpdateObstacles(bool isReset)
+        {
+            if (isReset)
+            {
+                foreach (var obstacle in obstacles)
+                {
+                    MaterialChanger.SetTransparency(obstacle, 1);
+                }
+            }
+        }
+        public void DeleteTarget(GameObject targetObject)
+        {
+
         }
     }
 
@@ -66,19 +81,22 @@ public class PlayerCamera : MonoBehaviour
 
     public void UpdateTargets(GameObject newTarget, bool shouldDestroy = false)
     {
-        if (shouldDestroy)
-        {
-
-        }
 
         if (newTarget != null)
         {
             targets.Add(new XrayTarget(newTarget));
         }
 
-        foreach (var target in targets)
+        for (int i = 0; i < targets.Count; i++)
         {
-            target.UpdateObstacles();
+            if (shouldDestroy && targets[i].Obj == newTarget)
+            {
+                targets[i].UpdateObstacles(true);
+                targets.RemoveAt(i);
+                i--;
+                continue;
+            }
+            targets[i].UpdateObstacles();
         }
     }
 }

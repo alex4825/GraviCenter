@@ -33,6 +33,7 @@ public class GraviCenter : MonoBehaviour
         isSearchingPlace = true;
         isPlaceFound = false;
         energyExplosion = energyCost / 2;
+        FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject);
     }
 
     private void Update()
@@ -99,6 +100,7 @@ public class GraviCenter : MonoBehaviour
             OnGraviCenterCreated?.Invoke(-energyCost);
             MaterialChanger.SetTransparency(gameObject, 1);
             GetComponent<SphereCollider>().enabled = true;
+            FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
         }
         else
         {
