@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RaycastTracker : MonoBehaviour
+public static class RaycastTracker
 {
-    [SerializeField] float rayDistance = 100f;
-    public GameObject GetRaycastObject(string objectTag)
+    public static GameObject GetRaycastObject(string objectTag)
     {
+        float rayDistance = 100f;
         // Raycast from camera position to cursor position
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -21,5 +21,27 @@ public class RaycastTracker : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public static List<GameObject> GetRaycastObjects(Transform target)
+    {
+        List<GameObject> obstacles = new List<GameObject>();
+
+        float rayDistance = (Camera.main.transform.position - target.position).magnitude;
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(target.position);
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+
+        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red);
+
+        RaycastHit[] hits = Physics.RaycastAll(ray, rayDistance);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.gameObject.transform == target.transform) //exclude the object itself
+                continue;
+
+            obstacles.Add(hit.collider.gameObject);
+        }
+        return obstacles;
     }
 }

@@ -29,7 +29,7 @@ public class GraviCenter : MonoBehaviour
     {
         player = FindObjectOfType<PlayerController>().gameObject;
         rbPlayer = player.GetComponent<Rigidbody>();
-        MaterialChanger.SetTransparency(gameObject, transparency);
+        //MaterialChanger.SetTransparency(gameObject, transparency);
         isSearchingPlace = true;
         isPlaceFound = false;
         energyExplosion = energyCost / 2;
@@ -41,24 +41,7 @@ public class GraviCenter : MonoBehaviour
         {
             if (Input.GetMouseButtonUp(0))
             {
-                GameObject floor = GetComponent<RaycastTracker>().GetRaycastObject("Floor");
-
-                LevelManager currentLevel = GameManager.CurrentLevel;
-
-                if (floor != null && currentLevel.EnergyAmount >= energyCost
-                    && currentLevel.Floors.Contains(floor.transform))
-                {
-                    SetTransformGC(floor.transform);
-                    currentLevel.Floors.Remove(floor.transform);
-                    OnGraviCenterCreated?.Invoke(-energyCost);
-                    MaterialChanger.SetTransparency(gameObject, 1);
-                }
-                else
-                {
-                    //cancel GC selecting 
-                    Destroy(gameObject);
-                }
-                isSearchingPlace = false;
+                SetGC();
                 return;
             }
             MoveToCursorPosition();
@@ -73,7 +56,7 @@ public class GraviCenter : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-               if (GetComponent<RaycastTracker>().GetRaycastObject("GC") == gameObject)
+               if (RaycastTracker.GetRaycastObject("GC") == gameObject)
                 {
                     GameManager.CurrentLevel.Floors.Add(gameObject.transform);
                     OnGraviCenterDestroyed?.Invoke(energyExplosion);
@@ -92,6 +75,27 @@ public class GraviCenter : MonoBehaviour
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
         transform.position = worldPosition;
+    }
+    private void SetGC()
+    {
+        GameObject floor = RaycastTracker.GetRaycastObject("Floor");
+
+        LevelManager currentLevel = GameManager.CurrentLevel;
+
+        if (floor != null && currentLevel.EnergyAmount >= energyCost
+            && currentLevel.Floors.Contains(floor.transform))
+        {
+            SetTransformGC(floor.transform);
+            currentLevel.Floors.Remove(floor.transform);
+            OnGraviCenterCreated?.Invoke(-energyCost);
+            MaterialChanger.SetTransparency(gameObject, 1);
+        }
+        else
+        {
+            //cancel GC selecting 
+            Destroy(gameObject);
+        }
+        isSearchingPlace = false;
     }
     private void MoveBall()
     {

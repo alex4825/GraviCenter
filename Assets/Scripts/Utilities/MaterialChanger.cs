@@ -1,27 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public static class MaterialChanger
 {
     public static void SetTransparency(GameObject obj, float alpha)
     {
-        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+        if (obj == null)
+            return;
+
+        List<Renderer> renderers = new List<Renderer>();
+
+
+        if (obj.GetComponents<Renderer>() != null)
+            renderers.AddRange(obj.GetComponents<Renderer>());
+
+        if (obj.transform.childCount > 0 && obj.GetComponentsInChildren<Renderer>() != null)
+            renderers.AddRange(obj.GetComponentsInChildren<Renderer>());
 
         foreach (Renderer renderer in renderers)
         {
             Material mat = renderer.material;
 
-            if (mat.shader.name == "Standard")
-            {
-                Color color = mat.color;
-                color.a = alpha;
-                mat.color = color;
-                SetEmission(ref mat, alpha);
-            }
+            Color color = mat.color;
+            color.a = alpha;
+            mat.color = color;
         }
     }
-
     private static void SetEmission(ref Material material, float alpha)
     {
         if (alpha == 1 && !material.IsKeywordEnabled("_EMISSION"))
@@ -39,4 +46,16 @@ public static class MaterialChanger
         }
     }
 
+    public static void SeeThroughWalls(List<PlayerCamera.XrayTarget> targets, float alpha)
+    {
+        /*foreach (var target in targets)
+        {
+            RaycastTracker.GetRaycastObjects(targets.obj);
+        }
+
+        foreach (GameObject obstacle in obstacles)
+        {
+            SetTransparency(obstacle, alpha);
+        }*/
+    }
 }

@@ -25,7 +25,7 @@ public class FloorSelector : MonoBehaviour
 
     private void Update()
     {
-        hoveredFloor = GetComponent<RaycastTracker>().GetRaycastObject("Floor");
+        hoveredFloor = RaycastTracker.GetRaycastObject("Floor");
 
         //floor was found
         if (hoveredFloor != null && GameManager.CurrentLevel.Floors.Contains(hoveredFloor.transform))
