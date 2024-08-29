@@ -14,7 +14,7 @@ public static class RaycastTracker
 
         foreach (RaycastHit hit in hits)
         {
-            // Choose floor object which the ray crossed with        
+            // Choose first object which the ray crossed with        
             if (hit.collider.gameObject.tag == objectTag)
             {
                 return hit.collider.gameObject;

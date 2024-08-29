@@ -13,7 +13,6 @@ public static class MaterialChanger
 
         List<Renderer> renderers = new List<Renderer>();
 
-
         if (obj.GetComponents<Renderer>() != null)
             renderers.AddRange(obj.GetComponents<Renderer>());
 
@@ -46,16 +45,4 @@ public static class MaterialChanger
         }
     }
 
-    public static void SeeThroughWalls(List<PlayerCamera.XrayTarget> targets, float alpha)
-    {
-        /*foreach (var target in targets)
-        {
-            RaycastTracker.GetRaycastObjects(targets.obj);
-        }
-
-        foreach (GameObject obstacle in obstacles)
-        {
-            SetTransparency(obstacle, alpha);
-        }*/
-    }
 }

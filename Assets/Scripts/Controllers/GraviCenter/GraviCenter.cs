@@ -29,7 +29,7 @@ public class GraviCenter : MonoBehaviour
     {
         player = FindObjectOfType<PlayerController>().gameObject;
         rbPlayer = player.GetComponent<Rigidbody>();
-        //MaterialChanger.SetTransparency(gameObject, transparency);
+        MaterialChanger.SetTransparency(gameObject, transparency);
         isSearchingPlace = true;
         isPlaceFound = false;
         energyExplosion = energyCost / 2;
@@ -44,7 +44,7 @@ public class GraviCenter : MonoBehaviour
                 SetGC();
                 return;
             }
-            MoveToCursorPosition();
+            MoveToCursorFloorPosition();
         }
         else if (GetDistanceToGC() < GravityZone)
         {
@@ -67,14 +67,23 @@ public class GraviCenter : MonoBehaviour
     }
 
     public float GetDistanceToGC() => (transform.position - player.transform.position).magnitude * 2;
-    private void MoveToCursorPosition()
+    private void MoveToCursorFloorPosition()
     {
-        Vector3 mousePosition = Input.mousePosition;
+        GameObject floor = RaycastTracker.GetRaycastObject("Floor");
 
-        mousePosition.z = distanceFromCamera;
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        if (floor == null) 
+        {
+            Vector3 mousePosition = Input.mousePosition;
 
-        transform.position = worldPosition;
+            mousePosition.z = distanceFromCamera;
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+            transform.position = worldPosition;
+        }
+        else if(GameManager.CurrentLevel.Floors.Contains(floor.transform))
+        {
+            SetTransformGC(floor.transform);
+        }
     }
     private void SetGC()
     {
@@ -89,6 +98,7 @@ public class GraviCenter : MonoBehaviour
             currentLevel.Floors.Remove(floor.transform);
             OnGraviCenterCreated?.Invoke(-energyCost);
             MaterialChanger.SetTransparency(gameObject, 1);
+            GetComponent<SphereCollider>().enabled = true;
         }
         else
         {

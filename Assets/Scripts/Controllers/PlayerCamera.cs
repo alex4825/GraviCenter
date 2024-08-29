@@ -50,7 +50,7 @@ public class PlayerCamera : MonoBehaviour
 
     private List<XrayTarget> targets;
 
-    void Start()
+    private void Start()
     {
         targets = new List<XrayTarget>();
         targets.Add(new XrayTarget(ball));
@@ -58,7 +58,7 @@ public class PlayerCamera : MonoBehaviour
         transform.position = ball.transform.position;
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         UpdateTargets(null);
         transform.position = ball.transform.position + offset;
