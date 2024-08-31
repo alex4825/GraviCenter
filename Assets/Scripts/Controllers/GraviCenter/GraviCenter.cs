@@ -59,7 +59,8 @@ public class GraviCenter : MonoBehaviour
             {
                if (RaycastTracker.GetRaycastObject("GC") == gameObject)
                 {
-                    GameManager.CurrentLevel.Floors.Add(gameObject.transform);
+                    GameManager.CurrentLevel.Floors.Add(GetFloorPositionGC());
+                    FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
                     OnGraviCenterDestroyed?.Invoke(energyExplosion);
                     Destroy(gameObject);
                 }
@@ -81,9 +82,9 @@ public class GraviCenter : MonoBehaviour
 
             transform.position = worldPosition;
         }
-        else if(GameManager.CurrentLevel.Floors.Contains(floor.transform))
+        else if(GameManager.CurrentLevel.Floors.Contains(floor.transform.position))
         {
-            SetTransformGC(floor.transform);
+            SetPositionGC(floor.transform);
         }
     }
     private void SetGC()
@@ -93,10 +94,10 @@ public class GraviCenter : MonoBehaviour
         LevelManager currentLevel = GameManager.CurrentLevel;
 
         if (floor != null && currentLevel.EnergyAmount >= energyCost
-            && currentLevel.Floors.Contains(floor.transform))
+            && currentLevel.Floors.Contains(floor.transform.position))
         {
-            SetTransformGC(floor.transform);
-            currentLevel.Floors.Remove(floor.transform);
+            SetPositionGC(floor.transform);
+            currentLevel.Floors.Remove(floor.transform.position);
             OnGraviCenterCreated?.Invoke(-energyCost);
             MaterialChanger.SetTransparency(gameObject, 1);
             GetComponent<SphereCollider>().enabled = true;
@@ -107,6 +108,7 @@ public class GraviCenter : MonoBehaviour
             //cancel GC selecting 
             Destroy(gameObject);
         }
+        FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
         isSearchingPlace = false;
     }
     private void MoveBall()
@@ -116,6 +118,10 @@ public class GraviCenter : MonoBehaviour
         Vector3 direction = (transform.position - player.transform.position).normalized;
         rbPlayer.AddForce(direction * gravityPower * powerDivider);
     }
-    private void SetTransformGC(Transform floorTransform) => transform.position = floorTransform.position;
+    private void SetPositionGC(Transform floorTransform) => transform.position = floorTransform.position;
 
+    private Vector3 GetFloorPositionGC()
+    {
+        return new Vector3(transform.position.x, transform.position.y + 0.5f*transform.localScale.y, transform.position.z);
+    }
 }

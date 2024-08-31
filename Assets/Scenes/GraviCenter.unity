@@ -58892,7 +58892,7 @@ MonoBehaviour:
   energyPrefab: {fileID: 9165401889116819802, guid: cc116262a38f90b4f90567fd268db7dd, type: 3}
   energyAmountTMP: {fileID: 116039389}
   energyAmount: 300
-  energyNums: 5
+  energyNums: 20
 --- !u!114 &8557281625699594726
 MonoBehaviour:
   m_ObjectHideFlags: 0

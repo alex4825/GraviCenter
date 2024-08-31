@@ -4,9 +4,9 @@ using UnityEngine;
 
 static public class FloorChecker
 {
-    static public List<Transform> FindFloors()
+    static public List<Vector3> FindFloors()
     {
-        List<Transform> transforms = new List<Transform>();
+        List<Vector3> positions = new List<Vector3>();
 
         string floorTag = "Floor";
 
@@ -16,10 +16,10 @@ static public class FloorChecker
         {
             if (child.gameObject.CompareTag(floorTag))
             {
-                transforms.Add(child.gameObject.transform);
+                positions.Add(child.gameObject.transform.position);
             }
         }
-        return transforms;
+        return positions;
     }
 
 }

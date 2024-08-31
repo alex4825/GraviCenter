@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
         if (collisionTag == "Energy")
         {
             OnEnergyPickedUp?.Invoke(collision.gameObject.GetComponent<Energy>().EnergyValue);
+            GameManager.CurrentLevel.Floors.Add(collision.gameObject.transform.position);
             Destroy(collision.gameObject);            
         }
 
