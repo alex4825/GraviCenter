@@ -45,7 +45,8 @@ public class LevelManager : MonoBehaviour
         {
             int randIndex = Random.Range(0, Floors.Count);
 
-            Vector3 pos = new Vector3(Floors[randIndex].x, Floors[randIndex].y - 0.5f * prefab.transform.localScale.y, Floors[randIndex].z);
+            Vector3 pos = Floors[randIndex];
+            pos.y = pos.y - 0.5f * prefab.transform.localScale.y;
 
             GameObject obj = Instantiate(prefab, pos, Quaternion.identity);
             //obj.transform.position.Set(obj.transform.position.x, obj.transform.position.y - 0.5f * obj.transform.localScale.y, obj.transform.position.z);

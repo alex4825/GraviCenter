@@ -59,7 +59,7 @@ public class GraviCenter : MonoBehaviour
             {
                if (RaycastTracker.GetRaycastObject("GC") == gameObject)
                 {
-                    GameManager.CurrentLevel.Floors.Add(GetFloorPositionGC());
+                    GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
                     FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
                     OnGraviCenterDestroyed?.Invoke(energyExplosion);
                     Destroy(gameObject);
@@ -120,8 +120,4 @@ public class GraviCenter : MonoBehaviour
     }
     private void SetPositionGC(Transform floorTransform) => transform.position = floorTransform.position;
 
-    private Vector3 GetFloorPositionGC()
-    {
-        return new Vector3(transform.position.x, transform.position.y + 0.5f*transform.localScale.y, transform.position.z);
-    }
 }
