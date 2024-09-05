@@ -45,4 +45,19 @@ public static class MaterialChanger
         }
     }
 
+    public static void InvertZoneDirection(GameObject obj)
+    {
+        if (obj == null) 
+            return;
+
+        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>(); 
+
+        foreach (Renderer renderer in renderers)
+        {
+            if (renderer.material.HasFloat("_Speed"))
+            {
+                renderer.material.SetFloat("_Speed", renderer.material.GetFloat("_Speed") * -1);
+            }
+        }
+    }
 }

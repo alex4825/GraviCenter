@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class BallController : MonoBehaviour
 {
     public delegate void EnergyPickedUpAction(int energyValue);
     public static event EnergyPickedUpAction OnEnergyPickedUp;

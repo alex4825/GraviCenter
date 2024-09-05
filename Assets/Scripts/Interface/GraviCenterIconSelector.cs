@@ -17,6 +17,7 @@ public class GraviCenterIconSelector : MonoBehaviour
         outlineImg.color = normalColor;
     }
 
+
     public void OnMouseDown()
     {
         Instantiate(graviCenterObject, Input.mousePosition, graviCenterObject.transform.rotation);

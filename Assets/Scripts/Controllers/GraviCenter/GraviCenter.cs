@@ -10,7 +10,6 @@ public class GraviCenter : MonoBehaviour
     private GameObject player;
     private Rigidbody rbPlayer;
     private bool isSearchingPlace;
-    private bool isPlaceFound;
     private float transparency = 0.1f;
     private int energyExplosion;
 
@@ -20,6 +19,7 @@ public class GraviCenter : MonoBehaviour
     [SerializeField] int energyCost = 100;
 
     public float GravityZone { get { return gravityZone; } set { gravityZone = value; } }
+    public bool IsRepeals { get; set; }
 
     public delegate void GraviCenterAction(int energyValue);
     public static event GraviCenterAction OnGraviCenterDestroyed;
@@ -27,13 +27,20 @@ public class GraviCenter : MonoBehaviour
 
     private void Start()
     {
-        player = FindObjectOfType<PlayerController>().gameObject;
+        player = FindObjectOfType<BallController>().gameObject;
         rbPlayer = player.GetComponent<Rigidbody>();
-        MaterialChanger.SetTransparency(gameObject, transparency);
-        isSearchingPlace = true;
-        isPlaceFound = false;
-        energyExplosion = energyCost / 2;
+        MaterialChanger.SetTransparency(gameObject, transparency);        
         FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject);
+
+        isSearchingPlace = true;
+        energyExplosion = energyCost / 2;
+
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            IsRepeals = true;
+            gravityPower *= -1;
+            MaterialChanger.InvertZoneDirection(gameObject);
+        }
     }
 
     private void Update()

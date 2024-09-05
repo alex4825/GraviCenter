@@ -21,14 +21,14 @@ public class LevelManager : MonoBehaviour
         energyAmountTMP.text = energyAmount.ToString();
         SetRandomPositions(energyPrefab, energyNums);
 
-        PlayerController.OnEnergyPickedUp += ChangeEnergyAmount;
+        BallController.OnEnergyPickedUp += ChangeEnergyAmount;
         GraviCenter.OnGraviCenterDestroyed += ChangeEnergyAmount;
         GraviCenter.OnGraviCenterCreated += ChangeEnergyAmount;
     }
 
     private void OnDisable()
     {
-        PlayerController.OnEnergyPickedUp -= ChangeEnergyAmount;
+        BallController.OnEnergyPickedUp -= ChangeEnergyAmount;
         GraviCenter.OnGraviCenterDestroyed -= ChangeEnergyAmount;
         GraviCenter.OnGraviCenterCreated -= ChangeEnergyAmount;
     }
@@ -49,7 +49,6 @@ public class LevelManager : MonoBehaviour
             pos.y = pos.y - 0.5f * prefab.transform.localScale.y;
 
             GameObject obj = Instantiate(prefab, pos, Quaternion.identity);
-            //obj.transform.position.Set(obj.transform.position.x, obj.transform.position.y - 0.5f * obj.transform.localScale.y, obj.transform.position.z);
 
             //delete the element to avoid repetitions
             Floors.RemoveAt(randIndex);
