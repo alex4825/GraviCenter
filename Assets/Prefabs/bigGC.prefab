@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1614295934143137252}
   - component: {fileID: 4366828755454127048}
   m_Layer: 0
-  m_Name: GC_big
+  m_Name: bigGC
   m_TagString: GC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

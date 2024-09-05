@@ -22,15 +22,13 @@ public class LevelManager : MonoBehaviour
         SetRandomPositions(energyPrefab, energyNums);
 
         BallController.OnEnergyPickedUp += ChangeEnergyAmount;
-        GraviCenter.OnGraviCenterDestroyed += ChangeEnergyAmount;
-        GraviCenter.OnGraviCenterCreated += ChangeEnergyAmount;
+        GraviCenter.OnChangeEnergy += ChangeEnergyAmount;
     }
 
     private void OnDisable()
     {
         BallController.OnEnergyPickedUp -= ChangeEnergyAmount;
-        GraviCenter.OnGraviCenterDestroyed -= ChangeEnergyAmount;
-        GraviCenter.OnGraviCenterCreated -= ChangeEnergyAmount;
+        GraviCenter.OnChangeEnergy -= ChangeEnergyAmount;
     }
 
     private void ChangeEnergyAmount(int energySummand)
@@ -55,5 +53,5 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    
+
 }
