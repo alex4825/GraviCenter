@@ -54,7 +54,7 @@ public class GraviCenter : MonoBehaviour
             }
             MoveToCursorFloorPosition();
         }
-        else if (GetDistanceToGC() < GravityZone)
+        else if (GetDistanceToBall() < GravityZone)
         {
             MoveBall();
         }
@@ -64,21 +64,21 @@ public class GraviCenter : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-               if (RaycastTracker.GetRaycastObject("GC") == gameObject)
+               if (RaycastTracker.GetPointerObject("GC") == gameObject)
                 {
                     GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
                     FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
                     OnGraviCenterDestroyed?.Invoke(energyExplosion);
-                    Destroy(gameObject);
+                    Destroy(gameObject);                    
                 }
             }
         }
     }
 
-    public float GetDistanceToGC() => (transform.position - player.transform.position).magnitude * 2;
+    public float GetDistanceToBall() => (transform.position - player.transform.position).magnitude * 2;
     private void MoveToCursorFloorPosition()
     {
-        GameObject floor = RaycastTracker.GetRaycastObject("Floor");
+        GameObject floor = RaycastTracker.GetPointerObject("Floor");
 
         if (floor == null) 
         {
@@ -96,7 +96,7 @@ public class GraviCenter : MonoBehaviour
     }
     private void SetGC()
     {
-        GameObject floor = RaycastTracker.GetRaycastObject("Floor");
+        GameObject floor = RaycastTracker.GetPointerObject("Floor");
 
         LevelManager currentLevel = GameManager.CurrentLevel;
 
@@ -121,7 +121,7 @@ public class GraviCenter : MonoBehaviour
     private void MoveBall()
     {
         //the closer from the ball to GC, the stronger gravitation 
-        float powerDivider = 1 - GetDistanceToGC() / gravityZone;
+        float powerDivider = 1 - GetDistanceToBall() / gravityZone;
         Vector3 direction = (transform.position - player.transform.position).normalized;
         rbPlayer.AddForce(direction * gravityPower * powerDivider);
     }

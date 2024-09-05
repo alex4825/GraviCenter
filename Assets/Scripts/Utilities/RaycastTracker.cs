@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class RaycastTracker
 {
-    public static GameObject GetRaycastObject(string objectTag)
+    public static GameObject GetPointerObject(string objectTag)
     {
         float rayDistance = 100f;
         // Raycast from camera position to cursor position
