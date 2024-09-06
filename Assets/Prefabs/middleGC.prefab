@@ -413,6 +413,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anglePerSecond: {x: 90, y: 120, z: -120}
+  animationDuration: 3
+  moveDistance: 0.2
 --- !u!135 &1293326113100936775
 SphereCollider:
   m_ObjectHideFlags: 0

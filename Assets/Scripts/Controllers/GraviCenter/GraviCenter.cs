@@ -23,8 +23,11 @@ public class GraviCenter : MonoBehaviour
     public float GravityZone { get { return gravityZone; } set { gravityZone = value; } }
     public bool IsRepeals { get; set; }
 
-    public delegate void GraviCenterAction(int energyValue);
-    public static event GraviCenterAction OnChangeEnergy;
+    public delegate void ChangeEnergyAction(int energyValue);
+    public static event ChangeEnergyAction OnChangeEnergy;
+
+    public delegate void GraviCenterConditionAction();
+    public static event GraviCenterConditionAction OnPlacedGC;
 
     private void Start()
     {
@@ -109,12 +112,13 @@ public class GraviCenter : MonoBehaviour
             SetPositionGC(floor.transform);
             currentLevel.Floors.Remove(floor.transform.position);
 
-            OnChangeEnergy?.Invoke(-energyCost);
-            StartCoroutine(EnergyReductionTimer());
-
             MaterialChanger.SetTransparency(gameObject, 1);
             GetComponent<SphereCollider>().enabled = true;
             FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
+
+            OnPlacedGC?.Invoke();
+            OnChangeEnergy?.Invoke(-energyCost);
+            StartCoroutine(EnergyReductionTimer());
         }
         else
         {
