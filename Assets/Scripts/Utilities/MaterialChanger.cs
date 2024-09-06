@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
@@ -21,19 +22,25 @@ public static class MaterialChanger
 
         foreach (Renderer renderer in renderers)
         {
-            Material mat = renderer.material;
+            Material material = renderer.material;
 
-            Color color = mat.color;
+            Color color = material.color;
             color.a = alpha;
-            mat.color = color;
+            material.color = color;
+
+            SetEmission(ref material, alpha, "_EmissionColor");
+
         }
     }
-    private static void SetEmission(ref Material material, float alpha)
+    private static void SetEmission(ref Material material, float alpha, string property)
     {
-        if (alpha == 1 && !material.IsKeywordEnabled("_EMISSION"))
-            material.EnableKeyword("_EMISSION");
-        else
-            material.DisableKeyword("_EMISSION");
+        if (material.HasProperty(property))
+        {
+            if (alpha == 1)
+                material.SetColor(property, Color.white);
+            else
+                material.SetColor(property, Color.black);
+        }
     }
     public static void ChangeMetallic(ref GameObject floor, float newMetallicValue)
     {
@@ -47,10 +54,10 @@ public static class MaterialChanger
 
     public static void InvertZoneDirection(GameObject obj)
     {
-        if (obj == null) 
+        if (obj == null)
             return;
 
-        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>(); 
+        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
 
         foreach (Renderer renderer in renderers)
         {
