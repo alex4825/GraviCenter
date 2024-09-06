@@ -12,7 +12,7 @@ public class GraviCenter : MonoBehaviour
     private bool isSearchingPlace;
     private float transparency = 0.1f;
     private int energyExplosion;
-    private int energyPerSecond;
+    private float secondsToReduseEnergy;
 
     [SerializeField] float gravityPower = 20f;
     [SerializeField] float gravityZone = 10f;
@@ -35,7 +35,7 @@ public class GraviCenter : MonoBehaviour
 
         isSearchingPlace = true;
         energyExplosion = energyCost / 2;
-        energyPerSecond = energyCost / 100;
+        secondsToReduseEnergy = 100f / energyCost;
 
         if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
         {
@@ -133,9 +133,9 @@ public class GraviCenter : MonoBehaviour
             {
                 yield break;
             }
-            OnChangeEnergy?.Invoke(-energyPerSecond);
+            OnChangeEnergy?.Invoke(-1);
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(secondsToReduseEnergy);
         }
     }
     private void MoveBall()

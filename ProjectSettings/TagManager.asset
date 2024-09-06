@@ -9,6 +9,7 @@ TagManager:
   - Level
   - Floor
   - Energy
+  - ZoneGC
   layers:
   - Default
   - TransparentFX
