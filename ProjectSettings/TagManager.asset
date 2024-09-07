@@ -9,7 +9,8 @@ TagManager:
   - Level
   - Floor
   - Energy
-  - ZoneGC
+  - RingGC
+  - Zone
   layers:
   - Default
   - TransparentFX
