@@ -384,7 +384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityPower: 60
-  gravityZone: 20
+  gravityZoneRadius: 20
   distanceFromCamera: 10
   lifeTime: 10
   energyCost: 200

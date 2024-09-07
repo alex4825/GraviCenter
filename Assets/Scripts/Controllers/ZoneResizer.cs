@@ -16,7 +16,7 @@ public class ZoneResizer : MonoBehaviour
         GraviCenter GC = new GraviCenter(); //if this file attached to GC
         if (TryGetComponent<GraviCenter>(out GC))
         {
-            scale = GC.GravityZone / DEFAULT_SCALE;
+            scale = GC.GravityZoneRadius / DEFAULT_SCALE;
         }
 
         zoneTransform.localScale = new Vector3(scale, scale, scale);

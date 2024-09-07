@@ -50,6 +50,6 @@ Material:
     - _Threshold: 0.05
     m_Colors:
     - _BackColor: {r: 0.09411765, g: 0.04313726, b: 0.09019608, a: 1}
-    - _Color: {r: 0.0627451, g: 0.8, b: 0, a: 0}
+    - _Color: {r: 0.13725491, g: 0.8862745, b: 1, a: 0}
     - _PortalColor: {r: 0.0627451, g: 0.8, b: 0, a: 0}
   m_BuildTextureStacks: []

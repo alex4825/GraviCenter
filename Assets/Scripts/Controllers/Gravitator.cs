@@ -8,10 +8,11 @@ public class Gravitator : MonoBehaviour
     protected Rigidbody rbBall;
 
     [SerializeField] float gravityPower = 20f;
-    [SerializeField] float gravityZone = 10f;
+    [SerializeField] float gravityZoneRadius = 10f;
+    [SerializeField] bool isGravitateDuringStart = false;
 
     public float GravityPower { get { return gravityPower; } set { gravityPower = value; } }
-    public float GravityZone { get { return gravityZone; } set { gravityZone = value; } }
+    public float GravityZoneRadius { get { return gravityZoneRadius; } set { gravityZoneRadius = value; } }
     public bool IsRepeals { get; set; }
     public bool IsGravitate { get; set; }
 
@@ -20,11 +21,11 @@ public class Gravitator : MonoBehaviour
         ball = FindObjectOfType<BallController>().gameObject;
         rbBall = ball.GetComponent<Rigidbody>();
 
-        IsGravitate = false;
+        IsGravitate = isGravitateDuringStart;
     }
     protected virtual void Update()
     {
-        if (IsGravitate && GetDistanceToBall() < GravityZone)
+        if (IsGravitate && GetDistanceToBall() < GravityZoneRadius)
         {
             GravitateBall();
         }
@@ -33,7 +34,7 @@ public class Gravitator : MonoBehaviour
     protected void GravitateBall()
     {
         //the closer from the ball to GC, the stronger gravitation 
-        float powerDivider = 1 - GetDistanceToBall() / gravityZone;
+        float powerDivider = 1 - GetDistanceToBall() / gravityZoneRadius;
         Vector3 direction = (transform.position - ball.transform.position).normalized;
         rbBall.AddForce(direction * GravityPower * powerDivider);
     }
