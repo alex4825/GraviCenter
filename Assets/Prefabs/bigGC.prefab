@@ -51,7 +51,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityPower: 90
-  gravityZoneRadius: 30
+  gravityZoneRadius: 15
+  isGravitateDuringStart: 0
   distanceFromCamera: 10
   lifeTime: 10
   energyCost: 300

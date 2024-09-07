@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7de044cd73aae940b803a2e2293d29e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneRadius: 2
+  zoneRadius: 1
 --- !u!114 &7854607408162041713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,6 +239,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb116f4c2d23ba54b8c54a70907ef0f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityPower: 10
-  gravityZoneRadius: 4
+  gravityPower: 100
+  gravityZoneRadius: 1.5
   isGravitateDuringStart: 1

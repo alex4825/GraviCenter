@@ -95,7 +95,7 @@ public class GraviCenter : Gravitator
     {
         GameObject floor = RaycastTracker.GetPointerObject("Floor");
 
-        LevelManager currentLevel = GameManager.CurrentLevel;
+        Level currentLevel = GameManager.CurrentLevel;
 
         if (floor != null && currentLevel.EnergyAmount >= energyCost
             && currentLevel.Floors.Contains(floor.transform.position))

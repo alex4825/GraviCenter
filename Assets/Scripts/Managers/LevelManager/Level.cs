@@ -2,29 +2,27 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
-public class LevelManager : MonoBehaviour
+public class Level : MonoBehaviour
 {
-    [SerializeField] GameObject energyPrefab;
+    [SerializeField] int number;
+    [SerializeField] int energyAmount = 500;
     [SerializeField] TextMeshProUGUI energyAmountTMP;
-    [SerializeField] int energyAmount = 150;
-    [SerializeField] int energyNums = 5;
-
+    public int Number { get { return number; } }
+    public bool IsActive { get; set; }
     public List<Vector3> Floors { get; set; }
     public int EnergyAmount { get { return energyAmount; } set { energyAmount = value; } }
 
     private void OnEnable()
     {
-        Floors = FloorChecker.FindFloors();
+        IsActive = true;
+        Floors = FloorChecker.FindFloors(this);
 
         energyAmountTMP.text = energyAmount.ToString();
-        SetRandomPositions(energyPrefab, energyNums);
 
         BallController.OnEnergyPickedUp += ChangeEnergyAmount;
         GraviCenter.OnChangeEnergy += ChangeEnergyAmount;
     }
-
     private void OnDisable()
     {
         BallController.OnEnergyPickedUp -= ChangeEnergyAmount;
@@ -37,21 +35,8 @@ public class LevelManager : MonoBehaviour
         energyAmountTMP.text = energyAmount.ToString();
     }
 
-    private void SetRandomPositions(GameObject prefab, int nums)
+    void Update()
     {
-        for (int i = 0; i < nums; i++)
-        {
-            int randIndex = Random.Range(0, Floors.Count);
 
-            Vector3 pos = Floors[randIndex];
-            pos.y = pos.y - 0.5f * prefab.transform.localScale.y;
-
-            GameObject obj = Instantiate(prefab, pos, Quaternion.identity);
-
-            //delete the element to avoid repetitions
-            Floors.RemoveAt(randIndex);
-        }
     }
-
-
 }

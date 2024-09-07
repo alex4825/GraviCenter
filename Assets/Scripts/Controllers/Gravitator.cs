@@ -38,5 +38,5 @@ public class Gravitator : MonoBehaviour
         Vector3 direction = (transform.position - ball.transform.position).normalized;
         rbBall.AddForce(direction * GravityPower * powerDivider);
     }
-    protected float GetDistanceToBall() => (transform.position - ball.transform.position).magnitude * 2;
+    protected float GetDistanceToBall() => (transform.position - ball.transform.position).magnitude;
 }

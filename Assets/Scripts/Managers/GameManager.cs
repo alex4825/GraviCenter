@@ -4,14 +4,35 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    static public LevelManager CurrentLevel { get; set; }
-    void OnEnable()
+    static public Level CurrentLevel { get; set; }
+    private void OnEnable()
     {
-        CurrentLevel = FindFirstObjectByType<LevelManager>();
+        SetCurrentLevel(1);
     }
 
-    void Update()
+    private void Update()
     {
-        
+
+    }
+
+    private Level GetCurrentLevel()
+    {
+        List<Level> levels = new List<Level>();
+
+        levels.AddRange(FindObjectsByType<Level>(FindObjectsSortMode.None));
+
+        Level currentLevel = levels.Find(level => level.IsActive == true);
+
+        return currentLevel;
+    }
+    private void SetCurrentLevel(int number)
+    {
+        List<Level> levels = new List<Level>();
+
+        levels.AddRange(FindObjectsByType<Level>(FindObjectsSortMode.None));
+
+        Level currentLevel = levels.Find(level => level.Number == number);
+        currentLevel.IsActive = true;
+        CurrentLevel = currentLevel;
     }
 }

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ZoneResizer : MonoBehaviour
 {
-    [SerializeField] float zoneRadius = 10;
+    [SerializeField] float zoneRadius = 5;
     void Start()
     {
         Transform zoneTransform = Searcher.FindChildWithTag(transform, "Zone");
 
-        const float DEFAULT_SCALE = 10; //10 units
+        const float DEFAULT_SCALE = 5; //5 units for radius
 
         float scale = zoneRadius / DEFAULT_SCALE;
 
