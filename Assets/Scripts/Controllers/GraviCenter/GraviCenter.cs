@@ -5,23 +5,16 @@ using System.Linq;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class GraviCenter : MonoBehaviour
+public class GraviCenter : Gravitator
 {
-    private GameObject player;
-    private Rigidbody rbPlayer;
     private bool isSearchingPlace;
     private float transparency = 0.1f;
     private int energyExplosion;
     private float secondsToReduseEnergy;
 
-    [SerializeField] float gravityPower = 20f;
-    [SerializeField] float gravityZone = 10f;
     [SerializeField] float distanceFromCamera = 10f;
     [SerializeField] int lifeTime = 10;
     [SerializeField] int energyCost = 100;
-
-    public float GravityZone { get { return gravityZone; } set { gravityZone = value; } }
-    public bool IsRepeals { get; set; }
 
     public delegate void ChangeEnergyAction(int energyValue);
     public static event ChangeEnergyAction OnChangeEnergy;
@@ -29,10 +22,10 @@ public class GraviCenter : MonoBehaviour
     public delegate void GraviCenterConditionAction();
     public static event GraviCenterConditionAction OnPlacedGC;
 
-    private void Start()
+    protected override void Start()
     {
-        player = FindObjectOfType<BallController>().gameObject;
-        rbPlayer = player.GetComponent<Rigidbody>();
+        base.Start();
+
         MaterialChanger.SetTransparency(gameObject, transparency);
         FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject);
 
@@ -43,14 +36,16 @@ public class GraviCenter : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
         {
             IsRepeals = true;
-            gravityPower *= -1;
+            GravityPower *= -1;
             MaterialChanger.InvertZoneDirection(gameObject);
         }
 
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (isSearchingPlace)
         {
             if (Input.GetMouseButtonUp(0))
@@ -59,10 +54,6 @@ public class GraviCenter : MonoBehaviour
                 return;
             }
             MoveToCursorFloorPosition();
-        }
-        else if (GetDistanceToBall() < GravityZone)
-        {
-            MoveBall();
         }
 
         //Alt + left mouse click => destroy this GC
@@ -116,6 +107,7 @@ public class GraviCenter : MonoBehaviour
             GetComponent<SphereCollider>().enabled = true;
             FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
 
+            IsGravitate = true;
             OnPlacedGC?.Invoke();
             OnChangeEnergy?.Invoke(-energyCost);
             StartCoroutine(EnergyReductionTimer());
@@ -142,14 +134,6 @@ public class GraviCenter : MonoBehaviour
             yield return new WaitForSeconds(secondsToReduseEnergy);
         }
     }
-    private void MoveBall()
-    {
-        //the closer from the ball to GC, the stronger gravitation 
-        float powerDivider = 1 - GetDistanceToBall() / gravityZone;
-        Vector3 direction = (transform.position - player.transform.position).normalized;
-        rbPlayer.AddForce(direction * gravityPower * powerDivider);
-    }
     private void SetPositionGC(Transform floorTransform) => transform.position = floorTransform.position;
-    private float GetDistanceToBall() => (transform.position - player.transform.position).magnitude * 2;
 
 }
