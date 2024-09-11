@@ -7,7 +7,7 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public static class MaterialChanger
 {
-    public static void SetTransparency(GameObject obj, float alpha)
+    public static void SetTransparency(GameObject obj, float alpha = 0.5f)
     {
         if (obj == null)
             return;

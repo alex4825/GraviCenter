@@ -11,7 +11,6 @@ public class PlayerCamera : MonoBehaviour
     {
         private GameObject obj;
         private List<GameObject> obstacles;
-        private float alpha = 0.1f;
         public GameObject Obj { get { return obj; } }
         public XrayTarget(GameObject targetObject)
         {
@@ -38,7 +37,7 @@ public class PlayerCamera : MonoBehaviour
                 if (obstacles.Contains(currentObstacles[i]))
                     continue;
 
-                MaterialChanger.SetTransparency(currentObstacles[i], alpha);
+                MaterialChanger.SetTransparency(currentObstacles[i]);
                 obstacles.Add(currentObstacles[i]);
             }
         }

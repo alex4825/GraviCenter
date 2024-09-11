@@ -239,6 +239,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb116f4c2d23ba54b8c54a70907ef0f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityPower: 100
+  gravityPower: 50
   gravityZoneRadius: 1.5
   isGravitateDuringStart: 1

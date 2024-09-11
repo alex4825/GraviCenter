@@ -8,7 +8,6 @@ using static UnityEngine.GraphicsBuffer;
 public class GraviCenter : Gravitator
 {
     private bool isSearchingPlace;
-    private float transparency = 0.1f;
     private int energyExplosion;
     private float secondsToReduseEnergy;
 
@@ -26,7 +25,7 @@ public class GraviCenter : Gravitator
     {
         base.Start();
 
-        MaterialChanger.SetTransparency(gameObject, transparency);
+        MaterialChanger.SetTransparency(gameObject);
         FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject);
 
         isSearchingPlace = true;
