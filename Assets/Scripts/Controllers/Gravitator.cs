@@ -13,7 +13,6 @@ public class Gravitator : MonoBehaviour
 
     public float GravityPower { get { return gravityPower; } set { gravityPower = value; } }
     public float GravityZoneRadius { get { return gravityZoneRadius; } set { gravityZoneRadius = value; } }
-    public bool IsRepeals { get; set; }
     public bool IsGravitate { get; set; }
 
     protected virtual void Start()

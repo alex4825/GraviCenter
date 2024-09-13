@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -31,14 +32,6 @@ public class GraviCenter : Gravitator
         isSearchingPlace = true;
         energyExplosion = energyCost / 2;
         secondsToReduseEnergy = 100f / energyCost;
-
-        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
-        {
-            IsRepeals = true;
-            GravityPower *= -1;
-            MaterialChanger.InvertZoneDirection(gameObject);
-        }
-
     }
 
     protected override void Update()
@@ -47,6 +40,17 @@ public class GraviCenter : Gravitator
 
         if (isSearchingPlace)
         {
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                GravityPower = -Mathf.Abs(GravityPower);
+                MaterialChanger.InvertZoneDirection(gameObject);
+            }
+            else if (Input.GetKeyUp(KeyCode.LeftControl))
+            {
+                GravityPower = Mathf.Abs(GravityPower);
+                MaterialChanger.InvertZoneDirection(gameObject);
+            }
+
             if (Input.GetMouseButtonUp(0))
             {
                 SetGC();

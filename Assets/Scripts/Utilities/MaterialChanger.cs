@@ -52,12 +52,12 @@ public static class MaterialChanger
         }
     }
 
-    public static void InvertZoneDirection(GameObject obj)
+    public static void InvertZoneDirection(GameObject objGC)
     {
-        if (obj == null)
+        if (objGC == null)
             return;
 
-        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+        Renderer[] renderers = objGC.GetComponentsInChildren<Renderer>();
 
         foreach (Renderer renderer in renderers)
         {

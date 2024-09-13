@@ -59247,7 +59247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   energyPrefab: {fileID: 9165401889116819802, guid: cc116262a38f90b4f90567fd268db7dd, type: 3}
-  energyNums: 25
+  energyNums: 10
 --- !u!114 &8711790713535851119
 MonoBehaviour:
   m_ObjectHideFlags: 0
