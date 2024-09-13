@@ -65,11 +65,11 @@ Material:
     - _BUILTIN_ZTest: 4
     - _BUILTIN_ZWrite: 0
     - _BUILTIN_ZWriteControl: 0
-    - _Metallic: 0.45
+    - _Metallic: 0.65
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Radius: 1.5
-    - _Smoothness: 0.8
+    - _Smoothness: 0.25
     - _Threshold: 0.05
     m_Colors:
     - _BackColor: {r: 0.09411765, g: 0.04313726, b: 0.09019608, a: 1}
