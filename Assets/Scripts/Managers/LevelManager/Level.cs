@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -10,13 +11,15 @@ public class Level : MonoBehaviour
     [SerializeField] TextMeshProUGUI energyAmountTMP;
     public int Number { get { return number; } }
     public bool IsActive { get; set; }
-    public List<Vector3> Floors { get; set; }
     public int EnergyAmount { get { return energyAmount; } set { energyAmount = value; } }
+    public List<Vector3> Floors { get; set; }
+    public List<Transform> GCs { get; set; }
 
     private void OnEnable()
     {
         IsActive = true;
         Floors = FloorChecker.FindFloors(this);
+        GCs = new List<Transform>();
 
         energyAmountTMP.text = energyAmount.ToString();
 

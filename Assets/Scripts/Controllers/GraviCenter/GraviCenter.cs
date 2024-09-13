@@ -55,6 +55,8 @@ public class GraviCenter : Gravitator
             MoveToCursorFloorPosition();
         }
 
+        #region GC removing
+
         //Alt + left mouse click => destroy this GC
         if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
         {
@@ -65,10 +67,13 @@ public class GraviCenter : Gravitator
                     GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
                     FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
                     OnChangeEnergy?.Invoke(energyExplosion);
+
+                    GameManager.CurrentLevel.GCs.Remove(gameObject.transform);
                     Destroy(gameObject);
                 }
             }
         }
+        #endregion
     }
 
 
@@ -101,6 +106,7 @@ public class GraviCenter : Gravitator
         {
             SetPositionGC(floor.transform);
             currentLevel.Floors.Remove(floor.transform.position);
+            currentLevel.GCs.Add(gameObject.transform);
 
             MaterialChanger.SetTransparency(gameObject, 1);
             GetComponent<SphereCollider>().enabled = true;

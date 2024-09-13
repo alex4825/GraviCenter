@@ -10,6 +10,8 @@ public class ShortcutManager : MonoBehaviour
 
     private void Update()
     {
+        #region GC creating
+
         if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
         {
             Instantiate(littleGC, Input.mousePosition, littleGC.transform.rotation);
@@ -24,6 +26,20 @@ public class ShortcutManager : MonoBehaviour
         {
             Instantiate(bigGC, Input.mousePosition, bigGC.transform.rotation);
         }
-    }
 
+        #endregion
+
+        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Z))
+        {
+            List<Transform> graviCenters = GameManager.CurrentLevel.GCs;
+            int count = graviCenters.Count;
+
+            if (count > 0)
+            {
+                Destroy(graviCenters[count - 1].gameObject);
+
+                graviCenters.RemoveAt(count - 1);
+            }
+        }
+    }
 }
