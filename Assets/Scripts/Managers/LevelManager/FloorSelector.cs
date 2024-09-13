@@ -18,9 +18,9 @@ public class FloorSelector : MonoBehaviour
         Material floorMaterial = GameObject.FindWithTag("Floor").GetComponent<Renderer>().material;
 
         HoveredFloor = null;
-        lastHoveredFloor = null;
-        hoverMetallicValue = 0f;
+        lastHoveredFloor = null;        
         originalMetallicValue = floorMaterial.GetFloat("_Metallic");
+        hoverMetallicValue = originalMetallicValue * 0.9f;
     }
 
     private void Update()
