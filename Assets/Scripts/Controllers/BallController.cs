@@ -17,22 +17,17 @@ public class BallController : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        string collisionTag = collision.gameObject.tag;
+        string collisionTag = other.gameObject.tag;
 
         if (collisionTag == "Energy")
         {
-            OnEnergyPickedUp?.Invoke(collision.gameObject.GetComponent<Energy>().EnergyValue);
+            OnEnergyPickedUp?.Invoke(other.gameObject.GetComponent<Energy>().EnergyValue);
 
-            GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(collision.transform.position));
+            GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(other.transform.position));
             
-            Destroy(collision.gameObject);
-        }
-
-        if (collisionTag == "Finish")
-        {
-            Debug.Log("Level complete");
+            Destroy(other.gameObject);
         }
     }
 }

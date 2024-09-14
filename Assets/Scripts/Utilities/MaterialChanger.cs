@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -7,7 +8,7 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public static class MaterialChanger
 {
-    public static void SetTransparency(GameObject obj, float alpha = 0.5f)
+    public static void SetTransparency(GameObject obj, float alpha = 0.5f, float duration = 0.5f)
     {
         if (obj == null)
             return;
@@ -24,12 +25,8 @@ public static class MaterialChanger
         {
             Material material = renderer.material;
 
-            Color color = material.color;
-            color.a = alpha;
-            material.color = color;
-
             SetEmission(ref material, alpha, "_EmissionColor");
-
+            material.DOFade(alpha, duration);            
         }
     }
     private static void SetEmission(ref Material material, float alpha, string property)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ public class GraviCenter : Gravitator
     private bool isSearchingPlace;
     private int energyExplosion;
     private float secondsToReduseEnergy;
+    private float speedDepth = 0.2f;
 
     [SerializeField] float distanceFromCamera = 10f;
     [SerializeField] int lifeTime = 10;
@@ -32,6 +34,12 @@ public class GraviCenter : Gravitator
         isSearchingPlace = true;
         energyExplosion = energyCost / 2;
         secondsToReduseEnergy = 100f / energyCost;
+
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            GravityPower = -Mathf.Abs(GravityPower);
+            MaterialChanger.InvertZoneDirection(gameObject);
+        }
     }
 
     protected override void Update()
@@ -60,31 +68,20 @@ public class GraviCenter : Gravitator
             return;
         }
 
-        #region GC removing
-
-        //Alt + left mouse click => destroy this GC
-        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && RaycastTracker.GetPointerObject("GC") == gameObject)
         {
-            if (RaycastTracker.GetPointerObject("GC") == gameObject)
+            //Alt + left mouse click => destroy this GC
+            if (Input.GetKey(KeyCode.LeftAlt))
             {
-                GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
-                FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
-                OnChangeEnergy?.Invoke(energyExplosion);
-
-                GameManager.CurrentLevel.GCs.Remove(gameObject.transform);
-                Destroy(gameObject);
+                DeleteGC();
+                return;
             }
-            return;
-        }
-        #endregion
 
-        if (Input.GetMouseButtonDown(0)) //move a standing GC
-        {
+            //move a standing GC
             isSearchingPlace = true;
             IsGravitate = false;
         }
     }
-
 
     private void MoveToCursorFloorPosition()
     {
@@ -150,4 +147,24 @@ public class GraviCenter : Gravitator
     }
     private void SetPositionGC(Transform floorTransform) => transform.position = floorTransform.position;
 
+    public void DeleteGC()
+    {
+        GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
+        FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
+        OnChangeEnergy?.Invoke(energyExplosion);
+
+        GameManager.CurrentLevel.GCs.Remove(gameObject.transform);
+
+        if (IsAttracts)
+        {
+            transform.DOScale(Vector3.zero, speedDepth)
+                .OnComplete(() => { Destroy(gameObject); });
+        }
+        else
+        {
+            MaterialChanger.SetTransparency(gameObject, 0, speedDepth);  
+            transform.DOScale(transform.localScale * 4, speedDepth).SetEase(Ease.InCubic)
+                .OnComplete(() => { Destroy(gameObject); });
+        }
+    }
 }

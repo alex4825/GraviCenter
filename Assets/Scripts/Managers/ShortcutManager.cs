@@ -36,9 +36,7 @@ public class ShortcutManager : MonoBehaviour
 
             if (count > 0)
             {
-                Destroy(graviCenters[count - 1].gameObject);
-
-                graviCenters.RemoveAt(count - 1);
+                graviCenters[count - 1].GetComponent<GraviCenter>().DeleteGC();
             }
         }
     }

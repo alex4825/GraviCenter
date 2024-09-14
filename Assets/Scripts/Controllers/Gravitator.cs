@@ -12,6 +12,7 @@ public class Gravitator : MonoBehaviour
     [SerializeField] bool isGravitateDuringStart = false;
 
     public float GravityPower { get { return gravityPower; } set { gravityPower = value; } }
+    public bool IsAttracts { get { return gravityPower > 0; } }
     public float GravityZoneRadius { get { return gravityZoneRadius; } set { gravityZoneRadius = value; } }
     public bool IsGravitate { get; set; }
 
