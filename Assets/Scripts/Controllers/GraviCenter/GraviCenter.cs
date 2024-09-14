@@ -57,27 +57,32 @@ public class GraviCenter : Gravitator
                 return;
             }
             MoveToCursorFloorPosition();
+            return;
         }
 
         #region GC removing
 
         //Alt + left mouse click => destroy this GC
-        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
+        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetMouseButtonDown(0))
         {
-            if (Input.GetMouseButtonDown(0))
+            if (RaycastTracker.GetPointerObject("GC") == gameObject)
             {
-                if (RaycastTracker.GetPointerObject("GC") == gameObject)
-                {
-                    GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
-                    FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
-                    OnChangeEnergy?.Invoke(energyExplosion);
+                GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
+                FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
+                OnChangeEnergy?.Invoke(energyExplosion);
 
-                    GameManager.CurrentLevel.GCs.Remove(gameObject.transform);
-                    Destroy(gameObject);
-                }
+                GameManager.CurrentLevel.GCs.Remove(gameObject.transform);
+                Destroy(gameObject);
             }
+            return;
         }
         #endregion
+
+        if (Input.GetMouseButtonDown(0)) //move a standing GC
+        {
+            isSearchingPlace = true;
+            IsGravitate = false;
+        }
     }
 
 
