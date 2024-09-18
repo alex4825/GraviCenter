@@ -23,21 +23,14 @@ public class PlayerCamera : MonoBehaviour
     private float verticalRotation = 0f;
     private float currentZoomDistance;
 
-    private List<XrayTarget> targets;
-
     private void Start()
     {
-        targets = new List<XrayTarget>();
-        targets.Add(new XrayTarget(ball));
-
         transform.position = ball.transform.position + offset;
         currentZoomDistance = Vector3.Distance(transform.position, ball.transform.position);
     }
 
     private void LateUpdate()
     {
-        UpdateTargets(null);
-
         if (Input.GetMouseButton(1))
         {
             RotateCameraAroundObject();
@@ -64,23 +57,5 @@ public class PlayerCamera : MonoBehaviour
         Camera.main.orthographicSize -= scrollInput * zoomSpeed;
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoomSize, maxZoomSize);
     }
-    public void UpdateTargets(GameObject newTarget, bool shouldDestroy = false)
-    {
-        if (newTarget != null)
-        {
-            targets.Add(new XrayTarget(newTarget));
-        }
 
-        for (int i = 0; i < targets.Count; i++)
-        {
-            if (shouldDestroy && targets[i].Obj == newTarget)
-            {
-                targets[i].UpdateObstacles(true);
-                targets.RemoveAt(i);
-                i--;
-                continue;
-            }
-            targets[i].UpdateObstacles();
-        }
-    }
 }

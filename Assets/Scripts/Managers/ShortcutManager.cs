@@ -23,12 +23,9 @@ public class ShortcutManager : MonoBehaviour
     private void Update()
     {
 
-        #region GC creating
-
         HandleObjectSelection(KeyCode.Alpha1, KeyCode.Keypad1, littleGC);
         HandleObjectSelection(KeyCode.Alpha2, KeyCode.Keypad2, middleGC);
         HandleObjectSelection(KeyCode.Alpha3, KeyCode.Keypad3, bigGC);
-        #endregion
 
         #region GC deleting
         if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Z))
@@ -51,7 +48,6 @@ public class ShortcutManager : MonoBehaviour
             if (selectedGC)
             {
                 Destroy(selectedGC);
-                FindFirstObjectByType<PlayerCamera>().UpdateTargets(selectedGC, true);
             }
             selectedGC = Instantiate(gcPrefab, Input.mousePosition, gcPrefab.transform.rotation);
         }
