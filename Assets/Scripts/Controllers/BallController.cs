@@ -25,7 +25,7 @@ public class BallController : MonoBehaviour
         {
             OnEnergyPickedUp?.Invoke(other.gameObject.GetComponent<Energy>().EnergyValue);
 
-            GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(other.transform.position));
+            GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(other.transform.position));
             
             Destroy(other.gameObject);
         }

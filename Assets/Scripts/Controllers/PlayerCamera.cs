@@ -38,7 +38,7 @@ public class PlayerCamera : MonoBehaviour
     {
         UpdateTargets(null);
 
-        if (Input.GetMouseButton(2))
+        if (Input.GetMouseButton(1))
         {
             RotateCameraAroundObject();
         }

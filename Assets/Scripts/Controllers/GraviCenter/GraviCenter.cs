@@ -96,7 +96,7 @@ public class GraviCenter : Gravitator
 
             transform.position = worldPosition;
         }
-        else if (GameManager.CurrentLevel.Floors.Contains(floor.transform.position))
+        else if (GameManager.Instance.CurrentLevel.Floors.Contains(floor.transform.position))
         {
             SetPositionGC(floor.transform);
         }
@@ -105,7 +105,7 @@ public class GraviCenter : Gravitator
     {
         GameObject floor = RaycastTracker.GetPointerObject("Floor");
 
-        Level currentLevel = GameManager.CurrentLevel;
+        Level currentLevel = GameManager.Instance.CurrentLevel;
 
         if (floor != null && currentLevel.EnergyAmount >= energyCost
             && currentLevel.Floors.Contains(floor.transform.position))
@@ -116,19 +116,19 @@ public class GraviCenter : Gravitator
 
             MaterialChanger.SetTransparency(gameObject, 1);
             GetComponent<SphereCollider>().enabled = true;
-            FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
 
             IsGravitate = true;
             OnPlacedGC?.Invoke();
             OnChangeEnergy?.Invoke(-energyCost);
             StartCoroutine(EnergyReductionTimer());
+            FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
         }
         else
         {
             //cancel GC selecting 
             Destroy(gameObject);
         }
-        FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
+        
         isSearchingPlace = false;
     }
 
@@ -136,7 +136,7 @@ public class GraviCenter : Gravitator
     {
         while (true)
         {
-            if (GameManager.CurrentLevel.EnergyAmount <= 0)
+            if (GameManager.Instance.CurrentLevel.EnergyAmount <= 0)
             {
                 yield break;
             }
@@ -149,11 +149,11 @@ public class GraviCenter : Gravitator
 
     public void DeleteGC()
     {
-        GameManager.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
+        GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
         FindFirstObjectByType<PlayerCamera>().UpdateTargets(gameObject, true);
         OnChangeEnergy?.Invoke(energyExplosion);
 
-        GameManager.CurrentLevel.GCs.Remove(gameObject.transform);
+        GameManager.Instance.CurrentLevel.GCs.Remove(gameObject.transform);
 
         if (IsAttracts)
         {
@@ -162,7 +162,7 @@ public class GraviCenter : Gravitator
         }
         else
         {
-            MaterialChanger.SetTransparency(gameObject, 0, speedDepth);  
+            MaterialChanger.SetTransparency(gameObject, 0, speedDepth);
             transform.DOScale(transform.localScale * 4, speedDepth).SetEase(Ease.InCubic)
                 .OnComplete(() => { Destroy(gameObject); });
         }

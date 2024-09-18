@@ -4,48 +4,28 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private bool isGamePaused = false;
+    public static GameManager Instance { get; private set; }
 
-    static public Level CurrentLevel { get; set; }
+    private bool isGamePaused = false;
+    private Level currentLevel;
+
+    public Level CurrentLevel { get { return currentLevel; } }
     private void OnEnable()
     {
         SetCurrentLevel(1);
     }
 
-    private void Update()
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Instance == null)
         {
-            TogglePause();
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-    }
-
-    void TogglePause()
-    {
-        // Если игра на паузе, возобновляем её
-        if (isGamePaused)
-        {
-            Time.timeScale = 1f; // Нормальная скорость времени
-            isGamePaused = false;
-            Debug.Log("Игра продолжена");
-        }
-        // Если игра не на паузе, ставим её на паузу
         else
         {
-            Time.timeScale = 0f; // Останавливаем время
-            isGamePaused = true;
-            Debug.Log("Игра на паузе");
+            Destroy(gameObject);
         }
-    }
-    private Level GetCurrentLevel()
-    {
-        List<Level> levels = new List<Level>();
-
-        levels.AddRange(FindObjectsByType<Level>(FindObjectsSortMode.None));
-
-        Level currentLevel = levels.Find(level => level.IsActive == true);
-
-        return currentLevel;
     }
     private void SetCurrentLevel(int number)
     {
@@ -53,8 +33,8 @@ public class GameManager : MonoBehaviour
 
         levels.AddRange(FindObjectsByType<Level>(FindObjectsSortMode.None));
 
-        Level currentLevel = levels.Find(level => level.Number == number);
-        currentLevel.IsActive = true;
-        CurrentLevel = currentLevel;
+        Level level = levels.Find(level => level.Number == number);
+        level.IsActive = true;
+        currentLevel = level;
     }
 }

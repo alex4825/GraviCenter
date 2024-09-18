@@ -16,7 +16,7 @@ public class EnergyDistributer : MonoBehaviour
     {
         for (int i = 0; i < nums; i++)
         {
-            List<Vector3> floors = GameManager.CurrentLevel.Floors;
+            List<Vector3> floors = GameManager.Instance.CurrentLevel.Floors;
 
             int randIndex = Random.Range(0, floors.Count);
 
