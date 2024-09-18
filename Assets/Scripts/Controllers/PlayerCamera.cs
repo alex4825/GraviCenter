@@ -21,25 +21,26 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float maxZoomSize = 6f;
 
     private float verticalRotation = 0f;
-    private float currentZoomDistance;
+    private float distanceToBall;
 
     private void Start()
     {
+        distanceToBall = offset.magnitude;
         transform.position = ball.transform.position + offset;
-        currentZoomDistance = Vector3.Distance(transform.position, ball.transform.position);
     }
 
     private void LateUpdate()
     {
         if (Input.GetMouseButton(1))
         {
-            RotateCameraAroundObject();
+            RotateCameraAroundBall();
         }
+        transform.position = ball.transform.position + offset;
         transform.LookAt(ball.transform);
         ZoomCamera();
     }
 
-    private void RotateCameraAroundObject()
+    private void RotateCameraAroundBall()
     {
         float horizontalInput = Input.GetAxis("Mouse X");
         float verticalInput = Input.GetAxis("Mouse Y");
@@ -49,6 +50,13 @@ public class PlayerCamera : MonoBehaviour
         verticalRotation -= verticalInput * rotationSpeed;
         verticalRotation = Mathf.Clamp(verticalRotation, minVertAngle, maxVertAngle);
         transform.position = new Vector3(transform.position.x, ball.transform.position.y + verticalRotation, transform.position.z);
+
+        // ----- For offset.magnitude == distanceToBall ----- //
+        Vector3 vectorToBall = ball.transform.position - transform.position;
+        float delta = vectorToBall.magnitude - distanceToBall;
+        float koef = delta / vectorToBall.magnitude;
+
+        offset = (transform.position - ball.transform.position) + vectorToBall * koef;
     }
     private void ZoomCamera()
     {
@@ -57,5 +65,4 @@ public class PlayerCamera : MonoBehaviour
         Camera.main.orthographicSize -= scrollInput * zoomSpeed;
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoomSize, maxZoomSize);
     }
-
 }

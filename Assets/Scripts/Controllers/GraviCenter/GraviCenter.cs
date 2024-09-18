@@ -9,14 +9,14 @@ using static UnityEngine.GraphicsBuffer;
 
 public class GraviCenter : Gravitator
 {
+    [SerializeField] float distanceFromCamera = 10f;
+    [SerializeField] int energyCost = 100;
+
     private bool isSearchingPlace;
     private int energyExplosion;
     private float secondsToReduseEnergy;
     private float speedDepth = 0.2f;
-
-    [SerializeField] float distanceFromCamera = 10f;
-    [SerializeField] int lifeTime = 10;
-    [SerializeField] int energyCost = 100;
+    private KeyCode invertKey = KeyCode.LeftAlt;
 
     public delegate void ChangeEnergyAction(int energyValue);
     public static event ChangeEnergyAction OnChangeEnergy;
@@ -34,7 +34,7 @@ public class GraviCenter : Gravitator
         energyExplosion = energyCost / 2;
         secondsToReduseEnergy = 100f / energyCost;
 
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(invertKey))
         {
             GravityPower = -Mathf.Abs(GravityPower);
             MaterialChanger.InvertZoneDirection(gameObject);
@@ -47,12 +47,12 @@ public class GraviCenter : Gravitator
 
         if (isSearchingPlace)
         {
-            if (Input.GetKeyDown(KeyCode.LeftControl))
+            if (Input.GetKeyDown(invertKey))
             {
                 GravityPower = -Mathf.Abs(GravityPower);
                 MaterialChanger.InvertZoneDirection(gameObject);
             }
-            else if (Input.GetKeyUp(KeyCode.LeftControl))
+            else if (Input.GetKeyUp(invertKey))
             {
                 GravityPower = Mathf.Abs(GravityPower);
                 MaterialChanger.InvertZoneDirection(gameObject);

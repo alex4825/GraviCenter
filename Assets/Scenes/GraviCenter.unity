@@ -26798,7 +26798,7 @@ MonoBehaviour:
   ball: {fileID: 1790999244}
   offset: {x: 45, y: 38, z: -45}
   rotationSpeed: 5
-  minVertAngle: 30
+  minVertAngle: 10
   maxVertAngle: 60
   zoomSpeed: 2
   minZoomSize: 3
