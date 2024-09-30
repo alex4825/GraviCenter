@@ -10,6 +10,9 @@ public class ShortcutManager : MonoBehaviour
 
     private GameObject selectedGC = null;
 
+    public delegate void DeleteGraviCenterAction(GameObject objGC);
+    public static event DeleteGraviCenterAction OnDeleteGC;
+
     private void OnEnable()
     {
         GraviCenter.OnPlacedGC += ClearSelectedGC;
@@ -27,18 +30,16 @@ public class ShortcutManager : MonoBehaviour
         HandleObjectSelection(KeyCode.Alpha2, KeyCode.Keypad2, middleGC);
         HandleObjectSelection(KeyCode.Alpha3, KeyCode.Keypad3, bigGC);
 
-        #region GC deleting
         if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Z))
         {
-            List<Transform> graviCenters = GameManager.Instance.CurrentLevel.GCs;
+            List<GraviCenter> graviCenters = GameManager.Instance.CurrentLevel.GCs;
             int count = graviCenters.Count;
 
             if (count > 0)
             {
-                graviCenters[count - 1].GetComponent<GraviCenter>().DeleteGC();
+                Destroyer.DeleteGC(graviCenters[count - 1]);
             }
         }
-        #endregion
     }
 
     private void HandleObjectSelection(KeyCode alphaKey, KeyCode keypadKey, GameObject gcPrefab)

@@ -13,13 +13,13 @@ public class Level : MonoBehaviour
     public bool IsActive { get; set; }
     public int EnergyAmount { get { return energyAmount; } set { energyAmount = value; } }
     public List<Vector3> Floors { get; set; }
-    public List<Transform> GCs { get; set; }
+    public List<GraviCenter> GCs { get; set; }
 
     private void OnEnable()
     {
         IsActive = true;
         Floors = FloorChecker.FindFloors(this);
-        GCs = new List<Transform>();
+        GCs = new List<GraviCenter>();
 
         energyAmountTMP.text = energyAmount.ToString();
 

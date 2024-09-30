@@ -13,9 +13,9 @@ public class GraviCenter : Gravitator
     [SerializeField] int energyCost = 100;
 
     private bool isSearchingPlace;
-    private int energyExplosion;
+    private int energyOnDestroy;
     private float secondsToReduseEnergy;
-    private float speedDepth = 0.2f;
+    private float speedAppear = 0.2f;
     private KeyCode invertKey = KeyCode.LeftAlt;
 
     public delegate void ChangeEnergyAction(int energyValue);
@@ -29,9 +29,11 @@ public class GraviCenter : Gravitator
         base.Start();
 
         MaterialChanger.SetTransparency(gameObject);
+        transform.localScale = Vector3.zero;
+        transform.DOScale(Vector3.one, speedAppear);
 
         isSearchingPlace = true;
-        energyExplosion = energyCost / 2;
+        energyOnDestroy = energyCost / 2;
         secondsToReduseEnergy = 100f / energyCost;
 
         if (Input.GetKey(invertKey))
@@ -72,7 +74,7 @@ public class GraviCenter : Gravitator
             //Alt + left mouse click => destroy this GC
             if (Input.GetKey(KeyCode.LeftAlt))
             {
-                DeleteGC();
+                Destroyer.DeleteGC(this);
                 return;
             }
 
@@ -97,7 +99,7 @@ public class GraviCenter : Gravitator
         }
         else if (GameManager.Instance.CurrentLevel.Floors.Contains(floor.transform.position))
         {
-            SetPositionGC(floor.transform);
+            transform.position = floor.transform.position;
         }
     }
     private void SetGC()
@@ -109,9 +111,9 @@ public class GraviCenter : Gravitator
         if (floor != null && currentLevel.EnergyAmount >= energyCost
             && currentLevel.Floors.Contains(floor.transform.position))
         {
-            SetPositionGC(floor.transform);
+            transform.position = floor.transform.position;
             currentLevel.Floors.Remove(floor.transform.position);
-            currentLevel.GCs.Add(gameObject.transform);
+            currentLevel.GCs.Add(this);
 
             MaterialChanger.SetTransparency(gameObject, 1);
             GetComponent<SphereCollider>().enabled = true;
@@ -143,25 +145,9 @@ public class GraviCenter : Gravitator
             yield return new WaitForSeconds(secondsToReduseEnergy);
         }
     }
-    private void SetPositionGC(Transform floorTransform) => transform.position = floorTransform.position;
 
-    public void DeleteGC()
+    private void OnDestroy()
     {
-        GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
-        OnChangeEnergy?.Invoke(energyExplosion);
-
-        GameManager.Instance.CurrentLevel.GCs.Remove(gameObject.transform);
-
-        if (IsAttracts)
-        {
-            transform.DOScale(Vector3.zero, speedDepth)
-                .OnComplete(() => { Destroy(gameObject); });
-        }
-        else
-        {
-            MaterialChanger.SetTransparency(gameObject, 0, speedDepth);
-            transform.DOScale(transform.localScale * 4, speedDepth).SetEase(Ease.InCubic)
-                .OnComplete(() => { Destroy(gameObject); });
-        }
+        OnChangeEnergy?.Invoke(energyOnDestroy);
     }
 }
