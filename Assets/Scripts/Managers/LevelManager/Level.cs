@@ -13,22 +13,38 @@ public class Level : MonoBehaviour
     public bool IsActive { get; set; }
     public int EnergyAmount { get { return energyAmount; } set { energyAmount = value; } }
     public List<Vector3> Floors { get; set; }
-    public List<GraviCenter> GCs { get; set; }
+    public List<GameObject> GCs { get; set; }
 
+    void Update()
+    {
+        if (EnergyAmount <= 0)
+        {
+            if (ShortcutManager.SelectedGC != null)
+            {
+                Destroyer.DeleteGC(ShortcutManager.SelectedGC);
+            }
+
+            for (int i = 0; i < GCs.Count; i++)
+            {
+                Destroyer.DeleteGC(GCs[i]);
+                i--;
+            }
+        }
+    }
     private void OnEnable()
     {
         IsActive = true;
         Floors = FloorChecker.FindFloors(this);
-        GCs = new List<GraviCenter>();
+        GCs = new List<GameObject>();
 
         energyAmountTMP.text = energyAmount.ToString();
 
-        BallController.OnEnergyPickedUp += ChangeEnergyAmount;
+        BallController.OnChangeEnergy += ChangeEnergyAmount;
         GraviCenter.OnChangeEnergy += ChangeEnergyAmount;
     }
     private void OnDisable()
     {
-        BallController.OnEnergyPickedUp -= ChangeEnergyAmount;
+        BallController.OnChangeEnergy -= ChangeEnergyAmount;
         GraviCenter.OnChangeEnergy -= ChangeEnergyAmount;
     }
 
@@ -38,8 +54,4 @@ public class Level : MonoBehaviour
         energyAmountTMP.text = energyAmount.ToString();
     }
 
-    void Update()
-    {
-
-    }
 }

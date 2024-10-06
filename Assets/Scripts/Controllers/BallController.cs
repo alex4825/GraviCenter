@@ -5,18 +5,30 @@ using UnityEngine;
 public class BallController : MonoBehaviour
 {
     private List<GameObject> obstacles = new List<GameObject>();
+    private Transform startPoint;
 
-    public delegate void EnergyPickedUpAction(int energyValue);
-    public static event EnergyPickedUpAction OnEnergyPickedUp;
+    public delegate void BallConditionAction(Transform ballTransform);
+    public static event BallConditionAction OnBallCreated;
+    public static event BallConditionAction OnBallDead;
+
+    public delegate void EnergyChangeAction(int energyValue);
+    public static event EnergyChangeAction OnChangeEnergy;
+
     void Start()
     {
-        Transform startPoint = GameObject.Find("StartPoint").transform;
+        startPoint = Searcher.FindChildWithTag(GameManager.Instance.CurrentLevel.transform, "StartPoint");
         transform.position = startPoint.position;
+        OnBallCreated?.Invoke(transform);
     }
 
     void Update()
     {
         UpdateXrayObstacles();
+
+        if (transform.position.y < -0.75f)
+        {
+            Depth();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -25,15 +37,15 @@ public class BallController : MonoBehaviour
 
         if (collisionTag == "Energy")
         {
-            OnEnergyPickedUp?.Invoke(other.gameObject.GetComponent<Energy>().EnergyValue);
+            OnChangeEnergy?.Invoke(other.gameObject.GetComponent<Energy>().EnergyValue);
 
             GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(other.transform.position));
-            
-            Destroy(other.gameObject);
+
+            Destroyer.DeleteEnergy(other.transform);
         }
     }
 
-    public void UpdateXrayObstacles()
+    private void UpdateXrayObstacles()
     {
         List<GameObject> currentObstacles = RaycastTracker.GetRaycastObjects(transform);
 
@@ -55,5 +67,10 @@ public class BallController : MonoBehaviour
             MaterialChanger.SetTransparency(currentObstacles[i]);
             obstacles.Add(currentObstacles[i]);
         }
+    }
+
+    private void Depth()
+    {
+        OnBallDead?.Invoke(transform);
     }
 }

@@ -15,22 +15,22 @@ public class GraviCenter : Gravitator
     private bool isSearchingPlace;
     private int energyOnDestroy;
     private float secondsToReduseEnergy;
-    private float speedAppear = 0.2f;
     private KeyCode invertKey = KeyCode.LeftAlt;
+    public int EnergyCost { get { return energyCost; } }
 
     public delegate void ChangeEnergyAction(int energyValue);
     public static event ChangeEnergyAction OnChangeEnergy;
 
-    public delegate void GraviCenterConditionAction();
+    public delegate void GraviCenterConditionAction(Transform objTransform);
     public static event GraviCenterConditionAction OnPlacedGC;
+    public static event GraviCenterConditionAction OnTakedGC;
 
     protected override void Start()
     {
         base.Start();
 
+        OnTakedGC?.Invoke(transform);
         MaterialChanger.SetTransparency(gameObject);
-        transform.localScale = Vector3.zero;
-        transform.DOScale(Vector3.one, speedAppear);
 
         isSearchingPlace = true;
         energyOnDestroy = energyCost / 2;
@@ -69,15 +69,9 @@ public class GraviCenter : Gravitator
             return;
         }
 
-        if (Input.GetMouseButtonDown(0) && RaycastTracker.GetPointerObject("GC") == gameObject)
+        if (Input.GetMouseButtonDown(0) && RaycastTracker.GetPointerObject("GC") == gameObject
+            && ShortcutManager.SelectedGC == null)
         {
-            //Alt + left mouse click => destroy this GC
-            if (Input.GetKey(KeyCode.LeftAlt))
-            {
-                Destroyer.DeleteGC(this);
-                return;
-            }
-
             //move a standing GC
             isSearchingPlace = true;
             IsGravitate = false;
@@ -113,23 +107,23 @@ public class GraviCenter : Gravitator
         {
             transform.position = floor.transform.position;
             currentLevel.Floors.Remove(floor.transform.position);
-            currentLevel.GCs.Add(this);
+            currentLevel.GCs.Add(gameObject);
 
             MaterialChanger.SetTransparency(gameObject, 1);
             GetComponent<SphereCollider>().enabled = true;
 
             IsGravitate = true;
-            OnPlacedGC?.Invoke();
+            OnPlacedGC?.Invoke(transform);
             OnChangeEnergy?.Invoke(-energyCost);
             StartCoroutine(EnergyReductionTimer());
+
+            isSearchingPlace = false;
         }
         else
         {
             //cancel GC selecting 
             Destroy(gameObject);
-        }
-        
-        isSearchingPlace = false;
+        }       
     }
 
     private IEnumerator EnergyReductionTimer()
@@ -148,6 +142,7 @@ public class GraviCenter : Gravitator
 
     private void OnDestroy()
     {
-        OnChangeEnergy?.Invoke(energyOnDestroy);
+        if (!isSearchingPlace)
+            OnChangeEnergy?.Invoke(energyOnDestroy);
     }
 }

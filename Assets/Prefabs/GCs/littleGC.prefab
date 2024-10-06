@@ -260,7 +260,6 @@ GameObject:
   - component: {fileID: 230337563738799162}
   - component: {fileID: 6928025957718636340}
   - component: {fileID: -8634593609902804612}
-  - component: {fileID: -7897670433585959194}
   - component: {fileID: 7869062219275420245}
   m_Layer: 0
   m_Name: littleGC
@@ -305,7 +304,6 @@ MonoBehaviour:
   gravityZoneRadius: 5
   isGravitateDuringStart: 0
   distanceFromCamera: 10
-  lifeTime: 10
   energyCost: 100
 --- !u!114 &-8634593609902804612
 MonoBehaviour:
@@ -320,21 +318,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoneRadius: 10
---- !u!114 &-7897670433585959194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6260532517220163855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fab8ead57d4d70248bc6f36b7c3c492b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anglePerSecond: {x: -120, y: 60, z: 90}
-  animationDuration: 3
-  moveDistance: 0.2
 --- !u!135 &7869062219275420245
 SphereCollider:
   m_ObjectHideFlags: 0

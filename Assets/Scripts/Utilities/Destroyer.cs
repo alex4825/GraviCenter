@@ -1,31 +1,35 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public static class Destroyer
 {
-
     private static float speedDepth = 0.2f;
-    public static void DeleteGC(GraviCenter GC)
+    public static void DeleteGC(GameObject objGC)
     {
-        if (GC.gameObject == null)
+        if (objGC == null)
             return;
 
-        GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(GC.transform.position));
-        GameManager.Instance.CurrentLevel.GCs.Remove(GC);
+        GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(objGC.transform.position));
+        GameManager.Instance.CurrentLevel.GCs.Remove(objGC);
 
-        if (GC.IsAttracts)
+        if (objGC.GetComponent<GraviCenter>().IsAttracts)
         {
-            GC.transform.DOScale(Vector3.zero, speedDepth)
-                .OnComplete(() => { Object.Destroy(GC.gameObject); });
+            objGC.transform.DOScale(Vector3.zero, speedDepth)
+                .OnComplete(() => { UnityEngine.Object.Destroy(objGC); });
         }
         else
         {
-            MaterialChanger.SetTransparency(GC.gameObject, 0, speedDepth);
-            GC.transform.DOScale(GC.transform.localScale * 4, speedDepth).SetEase(Ease.InCubic)
-                .OnComplete(() => { Object.Destroy(GC.gameObject); });
+            MaterialChanger.SetTransparency(objGC, 0, speedDepth);
+            objGC.transform.DOScale(objGC.transform.localScale * 4, speedDepth).SetEase(Ease.InCubic)
+                .OnComplete(() => { UnityEngine.Object.Destroy(objGC); });
         }
+    }
+    public static void DeleteEnergy(Transform energyTransform)
+    {
+        energyTransform.DOScale(Vector3.zero, speedDepth)
+                .OnComplete(() => { UnityEngine.Object.Destroy(energyTransform.gameObject); });
     }
 }

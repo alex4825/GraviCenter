@@ -343,7 +343,6 @@ GameObject:
   - component: {fileID: 834659608308172288}
   - component: {fileID: 2316614738617141234}
   - component: {fileID: 8506978480563049680}
-  - component: {fileID: 7556056544428115690}
   - component: {fileID: 1293326113100936775}
   m_Layer: 0
   m_Name: middleGC
@@ -387,7 +386,6 @@ MonoBehaviour:
   gravityZoneRadius: 10
   isGravitateDuringStart: 0
   distanceFromCamera: 10
-  lifeTime: 10
   energyCost: 200
 --- !u!114 &8506978480563049680
 MonoBehaviour:
@@ -402,21 +400,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoneRadius: 10
---- !u!114 &7556056544428115690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8647377746850542822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fab8ead57d4d70248bc6f36b7c3c492b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anglePerSecond: {x: 90, y: 120, z: -120}
-  animationDuration: 3
-  moveDistance: 0.2
 --- !u!135 &1293326113100936775
 SphereCollider:
   m_ObjectHideFlags: 0

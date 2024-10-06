@@ -20,7 +20,11 @@ public class GraviCenterIconSelector : MonoBehaviour
 
     public void OnMouseDown()
     {
-        Instantiate(graviCenterObject, Input.mousePosition, graviCenterObject.transform.rotation);
+        if (GameManager.Instance.CurrentLevel.EnergyAmount >= graviCenterObject.GetComponent<GraviCenter>().EnergyCost)
+        {
+            GameObject GC = Instantiate(graviCenterObject, Input.mousePosition, graviCenterObject.transform.rotation);
+            ShortcutManager.SelectedGC = GC;
+        }
     }
 
     public void OnMouseEnter()
