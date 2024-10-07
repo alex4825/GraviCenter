@@ -13,7 +13,8 @@ public class Animator : MonoBehaviour
     private void OnEnable()
     {
         BallController.OnBallCreated += ScaleAppear;
-        BallController.OnBallDead += ScaleDisappear;
+        BallController.OnBallFell += ScaleDisappear;
+        Level.OnBallMovedToStart += ScaleAppear;
 
         GraviCenter.OnTakedGC += ScaleAppear;
         GraviCenter.OnTakedGC += RotateRings;
@@ -27,7 +28,8 @@ public class Animator : MonoBehaviour
     private void OnDisable()
     {
         BallController.OnBallCreated -= ScaleAppear;
-        BallController.OnBallDead -= ScaleDisappear;
+        BallController.OnBallFell -= ScaleDisappear;
+        Level.OnBallMovedToStart -= ScaleAppear;
 
         GraviCenter.OnTakedGC -= ScaleAppear;
         GraviCenter.OnTakedGC -= RotateRings;

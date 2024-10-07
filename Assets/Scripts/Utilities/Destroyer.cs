@@ -27,7 +27,7 @@ public static class Destroyer
                 .OnComplete(() => { UnityEngine.Object.Destroy(objGC); });
         }
     }
-    public static void DeleteEnergy(Transform energyTransform)
+    public static void DeleteObject(Transform energyTransform)
     {
         energyTransform.DOScale(Vector3.zero, speedDepth)
                 .OnComplete(() => { UnityEngine.Object.Destroy(energyTransform.gameObject); });

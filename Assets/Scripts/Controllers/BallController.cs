@@ -7,9 +7,11 @@ public class BallController : MonoBehaviour
     private List<GameObject> obstacles = new List<GameObject>();
     private Transform startPoint;
 
-    public delegate void BallConditionAction(Transform ballTransform);
+    public bool IsAbove { get; set; }
+
+    public delegate void BallConditionAction(Transform ball);
     public static event BallConditionAction OnBallCreated;
-    public static event BallConditionAction OnBallDead;
+    public static event BallConditionAction OnBallFell;
 
     public delegate void EnergyChangeAction(int energyValue);
     public static event EnergyChangeAction OnChangeEnergy;
@@ -18,6 +20,7 @@ public class BallController : MonoBehaviour
     {
         startPoint = Searcher.FindChildWithTag(GameManager.Instance.CurrentLevel.transform, "StartPoint");
         transform.position = startPoint.position;
+        IsAbove = true;
         OnBallCreated?.Invoke(transform);
     }
 
@@ -25,9 +28,10 @@ public class BallController : MonoBehaviour
     {
         UpdateXrayObstacles();
 
-        if (transform.position.y < -0.75f)
+        if (IsAbove && transform.position.y < -0.75f)
         {
-            Depth();
+            OnBallFell?.Invoke(transform);
+            IsAbove = false;
         }
     }
 
@@ -41,7 +45,7 @@ public class BallController : MonoBehaviour
 
             GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(other.transform.position));
 
-            Destroyer.DeleteEnergy(other.transform);
+            Destroyer.DeleteObject(other.transform);
         }
     }
 
@@ -67,10 +71,5 @@ public class BallController : MonoBehaviour
             MaterialChanger.SetTransparency(currentObstacles[i]);
             obstacles.Add(currentObstacles[i]);
         }
-    }
-
-    private void Depth()
-    {
-        OnBallDead?.Invoke(transform);
     }
 }
