@@ -1,20 +1,23 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    [SerializeField] GameObject menuBackground;
+    [SerializeField] GameObject menuLevelSelect;
+    [SerializeField] GameObject inPlayInterface;
+    [SerializeField] GameObject ball;
+    [SerializeField] List<GameObject> parts;
 
     private bool isGamePaused = false;
     private Level currentLevel;
+    private GameObject currentPart;
 
+    public static GameManager Instance { get; private set; }
     public Level CurrentLevel { get { return currentLevel; } }
-    private void OnEnable()
-    {
-        SetCurrentLevel(1);
-    }
-
+    public GameObject CurrentPart { get { return currentPart; } }
     private void Awake()
     {
         if (Instance == null)
@@ -27,14 +30,38 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    private void SetCurrentLevel(int number)
+
+    private void OnEnable()
     {
+        LevelSelector.OnLevelSelected += PlayGame;
+    }
+
+    private void OnDisable()
+    {
+        LevelSelector.OnLevelSelected -= PlayGame;
+    }
+
+    void OnApplicationQuit()
+    {
+        DOTween.Clear();
+        DOTween.KillAll();
+    }
+
+    private void PlayGame(int partNumber, int levelNumber)
+    {
+        currentPart = parts[partNumber - 1];
+
         List<Level> levels = new List<Level>();
+        levels.AddRange(currentPart.GetComponentsInChildren<Level>(true));
 
-        levels.AddRange(FindObjectsByType<Level>(FindObjectsSortMode.None));
+        currentLevel = levels.Find(level => level.Number == levelNumber);
+        currentLevel.gameObject.SetActive(true);
+        currentLevel.IsActive = true;
 
-        Level level = levels.Find(level => level.Number == number);
-        level.IsActive = true;
-        currentLevel = level;
+        menuBackground.SetActive(false);
+        menuLevelSelect.SetActive(false);
+
+        inPlayInterface.SetActive(true);
+        Instantiate(ball);
     }
 }

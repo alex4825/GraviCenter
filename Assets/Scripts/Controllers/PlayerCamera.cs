@@ -9,7 +9,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class PlayerCamera : MonoBehaviour
 {
-    [SerializeField] GameObject ball;
     [SerializeField] Vector3 offset;
 
     [SerializeField] float rotationSpeed = 10f;
@@ -20,24 +19,32 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float minZoomSize = 3f;
     [SerializeField] private float maxZoomSize = 6f;
 
+    private GameObject ball;
     private float verticalRotation = 0f;
     private float distanceToBall;
+    private bool isPlay = false;
 
-    private void Start()
+    private void OnEnable()
     {
-        distanceToBall = offset.magnitude;
-        transform.position = ball.transform.position + offset;
+        BallController.OnBallCreated += SetBall;
+    }
+    private void OnDisable()
+    {
+        BallController.OnBallCreated -= SetBall;
     }
 
     private void LateUpdate()
     {
-        if (Input.GetMouseButton(1))
+        if (isPlay)
         {
-            RotateCameraAroundBall();
+            if (Input.GetMouseButton(1))
+            {
+                RotateCameraAroundBall();
+            }
+            transform.position = ball.transform.position + offset;
+            transform.LookAt(ball.transform);
+            ZoomCamera();
         }
-        transform.position = ball.transform.position + offset;
-        transform.LookAt(ball.transform);
-        ZoomCamera();
     }
 
     private void RotateCameraAroundBall()
@@ -64,5 +71,13 @@ public class PlayerCamera : MonoBehaviour
 
         Camera.main.orthographicSize -= scrollInput * zoomSpeed;
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoomSize, maxZoomSize);
+    }
+
+    private void SetBall(Transform ballTransform)
+    {
+        ball = ballTransform.gameObject;
+        distanceToBall = offset.magnitude;
+        transform.position = ball.transform.position + offset;
+        isPlay = true;
     }
 }
