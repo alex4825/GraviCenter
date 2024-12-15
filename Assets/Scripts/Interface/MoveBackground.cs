@@ -38,6 +38,7 @@ public class MoveBackground : MonoBehaviour
         PauseMovement();
     }
 
+    //if the player changes the size of the window, then adjust the background 
     private void OnRectTransformDimensionsChange()
     {
         if (!isSizeInitialized)
@@ -45,16 +46,13 @@ public class MoveBackground : MonoBehaviour
 
         Vector2 currentSize = ((RectTransform)transform).rect.size;
         if (currentSize == lastSize)
-        {
             return;
-        }
         lastSize = currentSize;
 
         moveUpFirst.Kill();
         moveUpSecond.Kill();
 
         transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
-
         secondImageObject.transform.position = new Vector2(Screen.width / 2, -Screen.height / 2);
 
         moveUpFirst = transform.DOMoveY(Screen.height * 1.5f, duration, true).SetLoops(-1, LoopType.Restart).SetEase(Ease.Linear);

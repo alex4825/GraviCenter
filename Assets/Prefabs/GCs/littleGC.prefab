@@ -318,6 +318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoneRadius: 10
+  zone: {fileID: 4709623851535153434}
 --- !u!135 &7869062219275420245
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ public static class RaycastTracker
     {
         float rayDistance = 100f;
         // Raycast from camera position to cursor position
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
 
         RaycastHit[] hits = Physics.RaycastAll(ray, rayDistance);
 
@@ -27,9 +27,9 @@ public static class RaycastTracker
     {
         List<GameObject> obstacles = new List<GameObject>();
 
-        float rayDistance = (Camera.main.transform.position - target.position).magnitude;
-        Vector3 screenPosition = Camera.main.WorldToScreenPoint(target.position);
-        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+        float rayDistance = (UnityEngine.Camera.main.transform.position - target.position).magnitude;
+        Vector3 screenPosition = UnityEngine.Camera.main.WorldToScreenPoint(target.position);
+        Ray ray = UnityEngine.Camera.main.ScreenPointToRay(screenPosition);
 
         Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red);
 

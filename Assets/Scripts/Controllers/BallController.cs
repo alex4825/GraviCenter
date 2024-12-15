@@ -5,22 +5,19 @@ using UnityEngine;
 public class BallController : MonoBehaviour
 {
     private List<GameObject> obstacles = new List<GameObject>();
-    private Transform startPoint;
-
-    public bool IsAbove { get; set; }
 
     public delegate void BallConditionAction(Transform ball);
     public static event BallConditionAction OnBallCreated;
-    public static event BallConditionAction OnBallFell;
+    //public static event BallConditionAction OnBallFell;
 
-    public delegate void EnergyChangeAction(int energyValue);
-    public static event EnergyChangeAction OnChangeEnergy;
+    public delegate void BallChangeEnergyAction(int energyValue);
+    public static event BallChangeEnergyAction OnBallCatchSpark;
+    public bool IsAbove { get; set; }
 
     void Start()
     {
-        startPoint = Searcher.FindChildWithTag(GameManager.Instance.CurrentLevel.transform, "StartPoint");
-        transform.position = startPoint.position;
         IsAbove = true;
+        Animator.ScaleAppear(transform);
         OnBallCreated?.Invoke(transform);
     }
 
@@ -30,7 +27,8 @@ public class BallController : MonoBehaviour
 
         if (IsAbove && transform.position.y < -0.75f)
         {
-            OnBallFell?.Invoke(transform);
+            Animator.ScaleDisappear(transform);
+            //OnBallFell?.Invoke(transform);
             IsAbove = false;
         }
     }
@@ -39,13 +37,11 @@ public class BallController : MonoBehaviour
     {
         string collisionTag = other.gameObject.tag;
 
-        if (collisionTag == "Energy")
+        if (collisionTag == "Spark")
         {
-            OnChangeEnergy?.Invoke(other.gameObject.GetComponent<Energy>().EnergyValue);
+            OnBallCatchSpark?.Invoke(other.gameObject.GetComponent<Spark>().Value);
 
-            GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(other.transform.position));
-
-            Destroyer.DeleteObject(other.transform);
+            Destroyer.DeleteObject(other.gameObject);
         }
     }
 

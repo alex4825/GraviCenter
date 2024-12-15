@@ -2,18 +2,22 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public static class Destroyer
 {
     private static float speedDepth = 0.2f;
-    public static void DeleteGC(GameObject objGC)
+    /*public static void DeleteGC(GameObject objGC)
     {
         if (objGC == null)
+        {
+            Debug.LogError("Can't delete GC. GameObject " + objGC.name + " doesn't exists or hasn't been initialized");
             return;
-
-        GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(objGC.transform.position));
-        GameManager.Instance.CurrentLevel.GCs.Remove(objGC);
+        }
+        Level level = GameManager.Instance.CurrentLevel;
+        level.Floors.Add(CoordEditor.RoundToHalf(objGC.transform.position));
+        //level.GCs.Remove(objGC);
 
         if (objGC.GetComponent<GraviCenter>().IsAttracts)
         {
@@ -26,10 +30,23 @@ public static class Destroyer
             objGC.transform.DOScale(objGC.transform.localScale * 4, speedDepth).SetEase(Ease.InCubic)
                 .OnComplete(() => { UnityEngine.Object.Destroy(objGC); });
         }
-    }
-    public static void DeleteObject(Transform energyTransform)
+    }*/
+    public static void DeleteObject(GameObject obj)
     {
-        energyTransform.DOScale(Vector3.zero, speedDepth)
-                .OnComplete(() => { UnityEngine.Object.Destroy(energyTransform.gameObject); });
+        if (obj == null)
+        {
+            Debug.LogError("Can't delete GC. GameObject " + obj.name + " doesn't exists or hasn't been initialized");
+            return;
+        }
+        obj.transform.DOScale(Vector3.zero, speedDepth)
+                .OnComplete(() => { UnityEngine.Object.Destroy(obj); });
+    }
+
+    public static void DeleteObjectList(List <GameObject> objList)
+    {
+        for (int i = 0; i< objList.Count; i++)
+        {
+            DeleteObject(objList[i]);
+        }
     }
 }

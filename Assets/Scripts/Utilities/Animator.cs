@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Animator : MonoBehaviour
+public static class Animator
 {
-    [SerializeField] Vector3Int anglePerSecond; 
-    [SerializeField] float animationDuration = 3f;
-    [SerializeField] float moveDistance = 0.1f;
-    [SerializeField] float speedAppear = 0.4f;
+    private static Vector3Int anglePerSecond = new Vector3Int(60, 180, 120);
+    private static float animationDuration = 3f;
+    private static float moveDistance = 0.1f;
+    private static float speedAppear = 0.4f;
 
-    private void OnEnable()
+    /*private void OnEnable()
     {
         BallController.OnBallCreated += ScaleAppear;
         BallController.OnBallFell += ScaleDisappear;
@@ -20,9 +20,9 @@ public class Animator : MonoBehaviour
         GraviCenter.OnTakedGC += RotateRings;
         GraviCenter.OnPlacedGC += MoveUpDown;
 
-        Energy.OnEnergyCreated += ScaleAppear;
-        Energy.OnEnergyCreated += MoveUpDown;
-        Energy.OnEnergyCreated += Rotate;
+        Spark.OnSparkCreated += ScaleAppear;
+        Spark.OnSparkCreated += MoveUpDown;
+        Spark.OnSparkCreated += Rotate;
     }
 
     private void OnDisable()
@@ -35,24 +35,24 @@ public class Animator : MonoBehaviour
         GraviCenter.OnTakedGC -= RotateRings;
         GraviCenter.OnPlacedGC -= MoveUpDown;
 
-        Energy.OnEnergyCreated -= ScaleAppear;
-        Energy.OnEnergyCreated -= MoveUpDown;
-        Energy.OnEnergyCreated -= Rotate;
-    }
-    private void MoveUpDown(Transform objTransform)
+        Spark.OnSparkCreated -= ScaleAppear;
+        Spark.OnSparkCreated -= MoveUpDown;
+        Spark.OnSparkCreated -= Rotate;
+    }*/
+    public static void MoveUpDown(Transform objTransform)
     {
         objTransform.DOMoveY(objTransform.position.y + moveDistance, animationDuration)
                  .SetLoops(-1, LoopType.Yoyo);
     }
 
-    private void Rotate(Transform objTransform)
+    public static void Rotate(Transform objTransform)
     {
         objTransform.DORotate(new Vector3(0, 180, 0), animationDuration, RotateMode.FastBeyond360)
                 .SetLoops(-1, LoopType.Incremental)
                 .SetEase(Ease.Linear);
     }
 
-    private void RotateRings(Transform transformGC)
+    public static void RotateRings(Transform transformGC)
     {
         List<Transform> ringTransforms = Searcher.FindChildsWithTag(transformGC, "RingGC");
 
@@ -64,13 +64,13 @@ public class Animator : MonoBehaviour
         }
     }
 
-    private void ScaleAppear(Transform objTransform)
+    public static void ScaleAppear(Transform objTransform)
     {
         objTransform.localScale = Vector3.zero;
         objTransform.DOScale(Vector3.one, speedAppear).SetEase(Ease.Linear);
     }
 
-    private void ScaleDisappear(Transform objTransform)
+    public static void ScaleDisappear(Transform objTransform)
     {
         objTransform.DOScale(Vector3.zero, speedAppear).SetEase(Ease.Linear);
     }

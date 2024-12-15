@@ -8,10 +8,10 @@ TagManager:
   - GameManager
   - Level
   - Floor
-  - Energy
   - RingGC
-  - Zone
+  - Spark
   - StartPoint
+  - Zone
   layers:
   - Default
   - TransparentFX
@@ -21,7 +21,7 @@ TagManager:
   - UI
   - Outline
   - Wall
-  - 
+  - Respawnable
   - 
   - 
   - 

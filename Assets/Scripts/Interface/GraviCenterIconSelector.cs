@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class GraviCenterIconSelector : MonoBehaviour
 {
-    private Image outlineImg;
-
-    [SerializeField] GameObject graviCenterObject;
+    [SerializeField] GameObject gcObject;
     [SerializeField] Color normalColor = Color.black;
     [SerializeField] Color hoverColor = Color.white;
+
+    private Image outlineImg;
 
     private void Start()
     {
@@ -17,13 +17,13 @@ public class GraviCenterIconSelector : MonoBehaviour
         outlineImg.color = normalColor;
     }
 
-
     public void OnMouseDown()
     {
-        if (GameManager.Instance.CurrentLevel.EnergyAmount >= graviCenterObject.GetComponent<GraviCenter>().EnergyCost)
+        Level currentLevel = GameManager.Instance.CurrentLevel;
+        if (currentLevel.EnergyAmount >= gcObject.GetComponent<GraviCenter>().EnergyCost)
         {
-            GameObject GC = Instantiate(graviCenterObject, Input.mousePosition, graviCenterObject.transform.rotation);
-            ShortcutManager.SelectedGC = GC;
+            GameObject GC = Instantiate(gcObject, Input.mousePosition, gcObject.transform.rotation, currentLevel.transform);
+            PlayShortcutHandler.SelectedGC = GC;
         }
     }
 
