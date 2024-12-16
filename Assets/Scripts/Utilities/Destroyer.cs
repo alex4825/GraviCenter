@@ -2,12 +2,13 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public static class Destroyer
 {
-    private static float speedDepth = 0.2f;
+    public static float SpeedDepth { get; } = 0.2f;
     /*public static void DeleteGC(GameObject objGC)
     {
         if (objGC == null)
@@ -35,18 +36,25 @@ public static class Destroyer
     {
         if (obj == null)
         {
-            Debug.LogError("Can't delete GC. GameObject " + obj.name + " doesn't exists or hasn't been initialized");
+            Debug.LogError("Can't delete GameObject. GameObject doesn't exists or hasn't been initialized");
             return;
         }
-        obj.transform.DOScale(Vector3.zero, speedDepth)
+        obj.transform.DOScale(Vector3.zero, SpeedDepth)
                 .OnComplete(() => { UnityEngine.Object.Destroy(obj); });
     }
 
-    public static void DeleteObjectList(List <GameObject> objList)
+    public static async void DeleteObjectList(List<GameObject> objList)
     {
-        for (int i = 0; i< objList.Count; i++)
+        if (objList == null || objList.Count == 0)
+            return;
+
+        for (int i = 0; i < objList.Count; i++)
         {
+            if (objList[i] == null)
+                continue;
             DeleteObject(objList[i]);
         }
+        await Task.Delay((int)(SpeedDepth * 1000));
+        objList.Clear();
     }
 }

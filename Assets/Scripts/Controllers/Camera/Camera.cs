@@ -22,7 +22,7 @@ public class Camera : MonoBehaviour
     private GameObject ball;
     private float verticalRotation = 0f;
     private float distanceToBall;
-    private bool isPlay = false;
+    private bool isFollowBall = false;
 
     private void OnEnable()
     {
@@ -35,7 +35,7 @@ public class Camera : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (isPlay)
+        if (isFollowBall)
         {
             if (Input.GetMouseButton(1))
             {
@@ -46,12 +46,12 @@ public class Camera : MonoBehaviour
             ZoomCamera();
         }
     }
-    private void SetBall(Transform ballTransform)
+    private void SetBall()
     {
-        ball = ballTransform.gameObject;
+        ball = GameManager.Instance.CurrentLevel.Ball;
         distanceToBall = offset.magnitude;
         transform.position = ball.transform.position + offset;
-        isPlay = true;
+        isFollowBall = true;
     }
 
     private void RotateCameraAroundBall()

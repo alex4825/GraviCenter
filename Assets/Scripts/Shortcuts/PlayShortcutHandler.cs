@@ -72,7 +72,7 @@ public class PlayShortcutHandler : MonoBehaviour
         }
     }
 
-    private void ClearSelectedGC(Transform transformGC)
+    private void ClearSelectedGC(GraviCenter transformGC)
     {
         SelectedGC = null;
     }

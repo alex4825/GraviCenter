@@ -2,103 +2,79 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    int energyAmount;
-    private float fallTime = 2f;
-
     [SerializeField] int number;
-    [SerializeField] int startEnergyAmount = 500;
-    [SerializeField] TextMeshProUGUI energyAmountTMP;
-    [SerializeField] float restartTimeInSec = 1f;
     [SerializeField] GameObject sparkObject;
     [SerializeField] int sparksNumber = 10;
     [SerializeField] GameObject startPoint;
+    [SerializeField] GameObject ballPrefab;
 
-    public delegate void BallMoveAction(Transform ball);
-    public static event BallMoveAction OnBallMovedToStart;
+    public delegate void LevelAction();
+    public static event LevelAction OnBallMovedToStart;
+    public static event LevelAction OnLevelInitiated;
 
     public int Number { get { return number; } }
-    public int EnergyAmount { get { return energyAmount; } }
+    public int EnergyAmount { get { return GetComponent<Energy>().Amount; } }
     public List<Vector3> Floors { get; set; }
-    public List<GameObject> GCs { get; set; }
+    public GameObject Ball { get; private set; }
+    public List<GameObject> GCs { get; private set; } = new List<GameObject>();
+    public List<GameObject> Sparks { get; private set; }
 
-    private void Start()
+    public void Restart(float restartTimeInSec)
     {
-        GCs = new List<GameObject>();
-        energyAmount = startEnergyAmount;
-        energyAmountTMP.text = energyAmount.ToString();
+        StartCoroutine(MoveBallToStart(restartTimeInSec));
     }
-    private void Update()
+    private IEnumerator MoveBallToStart(float restartTime)
     {
-        if (energyAmount <= 0)
-        {
-            Destroyer.DeleteObjectList(GCs);
-            GCs.Clear();
-        }
-    }
-    private void OnEnable()
-    {
-        //GameManager.OnGameStateChanged +=
-        BallController.OnBallCatchSpark += AddEnergyAmount;
-        GraviCenter.OnChangeEnergy += AddEnergyAmount;
-        //BallController.OnBallFell += Restart;
-    }
-    private void OnDisable()
-    {
-        BallController.OnBallCatchSpark -= AddEnergyAmount;
-        GraviCenter.OnChangeEnergy -= AddEnergyAmount;
-        //BallController.OnBallFell -= Restart;
-    }
-
-    private void AddEnergyAmount(int energySummand)
-    {
-        energyAmount += energySummand;
-        energyAmountTMP.text = energyAmount.ToString();
-    }
-
-    private void ResetEnergyAmount()
-    {
-        energyAmount = startEnergyAmount;
-        energyAmountTMP.text = energyAmount.ToString();
-    }
-
-    private void Restart(Transform ball)
-    {
-        StartCoroutine(RestartTimer(ball));
-    }
-    private IEnumerator RestartTimer(Transform ball)
-    {
-        Rigidbody ballRb = ball.GetComponent<Rigidbody>();
-        Collider ballCollider = ball.GetComponent<Collider>();
+        Rigidbody ballRb = Ball.GetComponent<Rigidbody>();
+        Collider ballCollider = Ball.GetComponent<Collider>();
 
         //ball falls some time
-        yield return new WaitForSeconds(fallTime);
+        yield return new WaitForSeconds((float)restartTime / 4);
 
         ballRb.isKinematic = true;
         ballCollider.enabled = false;
 
         //ball is hanging some time
-        yield return new WaitForSeconds(fallTime / 2);
+        yield return new WaitForSeconds((float)restartTime / 8);
+
+        GetComponent<FloorSelector>().enabled = false;
+        Animator.ScaleDisappear(Ball.transform);
+        Destroyer.DeleteObjectList(GCs);
+        Destroyer.DeleteObjectList(Sparks);
 
         //ball moves to start some time
-        yield return ball.DOMove(startPoint.transform.position, restartTimeInSec).WaitForCompletion();
+        yield return Ball.transform.DOMove(startPoint.transform.position, restartTime / 2).WaitForCompletion();
+
+        Animator.ScaleAppear(Ball.transform);
+
+        yield return new WaitForSeconds((float)restartTime / 8);
+
+        Initiate();
+
+        yield return new WaitForSeconds(Destroyer.SpeedDepth);
 
         ballRb.isKinematic = false;
         ballCollider.enabled = true;
-        ball.GetComponent<BallController>().IsAbove = true;
-        OnBallMovedToStart?.Invoke(ball);
-
-        ResetEnergyAmount();
+        OnBallMovedToStart?.Invoke();
     }
 
-    public void Initiate(GameObject ballPrefab)
+    public void Initiate()
     {
+        if (GameManager.Instance.GameState == GameStates.Started)
+            Ball = Instantiate(ballPrefab, startPoint.transform.position, Quaternion.identity, transform);
+
         Floors = FloorChecker.FindFloors(this);
-        Distributer.SetRandPositions(this, sparkObject, sparksNumber);
-        Instantiate(ballPrefab, startPoint.transform.position, Quaternion.identity, transform);
+        GCs = new List<GameObject>();
+        Sparks = Distributer.RandomizePositions(this, sparkObject, sparksNumber);
+
+        GetComponent<FloorSelector>().enabled = true;
+
+        OnLevelInitiated?.Invoke();
     }
 }

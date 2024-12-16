@@ -6,30 +6,28 @@ public class BallController : MonoBehaviour
 {
     private List<GameObject> obstacles = new List<GameObject>();
 
-    public delegate void BallConditionAction(Transform ball);
+    public delegate void BallConditionAction();
     public static event BallConditionAction OnBallCreated;
-    //public static event BallConditionAction OnBallFell;
+    public static event BallConditionAction OnBallFell;
 
     public delegate void BallChangeEnergyAction(int energyValue);
     public static event BallChangeEnergyAction OnBallCatchSpark;
-    public bool IsAbove { get; set; }
 
     void Start()
     {
-        IsAbove = true;
+        //IsAbove = true;
         Animator.ScaleAppear(transform);
-        OnBallCreated?.Invoke(transform);
+        OnBallCreated?.Invoke();
     }
 
     void Update()
     {
         UpdateXrayObstacles();
 
-        if (IsAbove && transform.position.y < -0.75f)
+        if (transform.position.y < -1f && GameManager.Instance.GameState == GameStates.Playing)
         {
-            Animator.ScaleDisappear(transform);
-            //OnBallFell?.Invoke(transform);
-            IsAbove = false;
+            OnBallFell?.Invoke();
+            //IsAbove = false;
         }
     }
 
@@ -41,7 +39,7 @@ public class BallController : MonoBehaviour
         {
             OnBallCatchSpark?.Invoke(other.gameObject.GetComponent<Spark>().Value);
 
-            Destroyer.DeleteObject(other.gameObject);
+            Destroyer.DeleteObject(other.gameObject);  
         }
     }
 

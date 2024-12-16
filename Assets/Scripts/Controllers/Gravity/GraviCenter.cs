@@ -13,16 +13,13 @@ public class GraviCenter : Gravitator
     [SerializeField] int energyCost = 100;
 
     private bool isSearchingPlace;
-    private float secondsToReduseEnergy;
     private KeyCode invertKey = KeyCode.LeftAlt;
 
-    public delegate void ChangeEnergyAction(int energyValue);
-    public static event ChangeEnergyAction OnChangeEnergy;
-
-    public delegate void GraviCenterConditionAction(Transform objTransform);
+    public delegate void GraviCenterConditionAction(GraviCenter graviCenter);
     public static event GraviCenterConditionAction OnPlacedGC;
-    //public static event GraviCenterConditionAction OnTakedGC;
+    public static event GraviCenterConditionAction OnDeletedGC;
     public int EnergyCost { get { return energyCost; } }
+    public int EnergyPerSecondCost { get { return energyCost / 100; } }
 
     protected override void Start()
     {
@@ -33,7 +30,6 @@ public class GraviCenter : Gravitator
         Animator.ScaleAppear(transform);
 
         isSearchingPlace = true;
-        secondsToReduseEnergy = 100f / energyCost;
 
         if (Input.GetKey(invertKey))
         {
@@ -78,10 +74,12 @@ public class GraviCenter : Gravitator
     }
     private void OnDestroy()
     {
-        if (!isSearchingPlace)
-            OnChangeEnergy?.Invoke(energyCost / 2);
-        GameManager.Instance.CurrentLevel.GCs.Remove(gameObject);
-        GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
+        if (!isSearchingPlace && GameManager.Instance.GameState == GameStates.Playing)
+        {
+            OnDeletedGC?.Invoke(this);
+            GameManager.Instance.CurrentLevel.GCs.Remove(gameObject);
+            GameManager.Instance.CurrentLevel.Floors.Add(CoordEditor.RoundToHalf(transform.position));
+        }
     }
 
     private void MoveToCursorFloorPosition()
@@ -119,29 +117,14 @@ public class GraviCenter : Gravitator
             GetComponent<SphereCollider>().enabled = true;
 
             IsGravitate = true;
-            OnPlacedGC?.Invoke(transform);
-            OnChangeEnergy?.Invoke(-energyCost);
-            StartCoroutine(EnergyReductionTimer());
+            OnPlacedGC?.Invoke(this);
 
             isSearchingPlace = false;
         }
         else
         {
             //cancel GC selecting 
-             Destroy(gameObject);
-        }       
-    }
-    private IEnumerator EnergyReductionTimer()
-    {
-        while (true)
-        {
-            if (GameManager.Instance.CurrentLevel.EnergyAmount <= 0)
-            {
-                yield break;
-            }
-            OnChangeEnergy?.Invoke(-1);
-
-            yield return new WaitForSeconds(secondsToReduseEnergy);
+            Destroy(gameObject);
         }
     }
 }

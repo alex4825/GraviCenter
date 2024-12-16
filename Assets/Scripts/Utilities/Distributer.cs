@@ -6,17 +6,19 @@ using UnityEngine;
 
 public static class Distributer
 {
-    public static void SetRandPositions(Level level, GameObject prefab, int amount)
+    public static List<GameObject> RandomizePositions(Level level, GameObject prefab, int amount)
     {
+        List<GameObject> initiatedObjList = new List<GameObject>();
         List<Vector3> floors = level.Floors;
 
         Vector3[] randPositions = GetRandPositions(new List<Vector3>(floors), amount);
 
         for (int i = 0; i < amount; i++)
         {
-            Object.Instantiate(prefab, randPositions[i], Quaternion.identity, level.transform);
+            initiatedObjList.Add(Object.Instantiate(prefab, randPositions[i], Quaternion.identity, level.transform));
         }
         floors.RemoveAll(x => randPositions.Contains(x));
+        return initiatedObjList;
     }
     private static Vector3[] GetRandPositions(List<Vector3> floorsCopy, int amount)
     {

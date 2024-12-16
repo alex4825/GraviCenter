@@ -5,5 +5,6 @@ public enum GameStates
     Playing,
     Paused,
     Resumed,
+    Restarting,
     Losing
 }

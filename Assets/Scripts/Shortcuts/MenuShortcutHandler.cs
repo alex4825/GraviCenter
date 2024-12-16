@@ -5,14 +5,14 @@ using UnityEngine;
 public class MenuShortcutHandler : MonoBehaviour
 {
     public delegate void MenuEnableAction();
-    public static event MenuEnableAction OnMenuEnable;
+    public static event MenuEnableAction OnMenuEnabled;
 
     private void Update()
     {
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            OnMenuEnable?.Invoke();
+            OnMenuEnabled?.Invoke();
         }
     }
 }

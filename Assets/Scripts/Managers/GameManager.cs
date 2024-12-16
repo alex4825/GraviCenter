@@ -1,15 +1,14 @@
 ﻿using DG.Tweening;
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject levelSelectInterface;
     [SerializeField] GameObject inPlayInterface;
-    [SerializeField] GameObject ball;
     [SerializeField] List<GameObject> parts;
+    [SerializeField] float restartTimeInSec = 1f;
 
     private Level currentLevel;
     private GameObject currentPart;
@@ -18,9 +17,6 @@ public class GameManager : MonoBehaviour
     public Level CurrentLevel { get { return currentLevel; } }
     public GameObject CurrentPart { get { return currentPart; } }
     public GameStates GameState { get; private set; }
-
-    //public delegate void GameStateAction(GameStates gameState);
-    //public static event GameStateAction OnGameStateChanged;
 
     private void Awake()
     {
@@ -39,13 +35,17 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         LevelSelector.OnLevelSelected += StartGame;
-        MenuShortcutHandler.OnMenuEnable += PauseGame;
+        MenuShortcutHandler.OnMenuEnabled += PauseGame;
+        BallController.OnBallFell += RestartingGame;
+        Level.OnBallMovedToStart += RestartGame;
     }
 
     private void OnDisable()
     {
         LevelSelector.OnLevelSelected -= StartGame;
-        MenuShortcutHandler.OnMenuEnable -= PauseGame;
+        MenuShortcutHandler.OnMenuEnabled -= PauseGame;
+        BallController.OnBallFell += RestartingGame;
+        Level.OnBallMovedToStart -= RestartGame;
     }
 
     void OnApplicationQuit()
@@ -56,22 +56,22 @@ public class GameManager : MonoBehaviour
 
     private void StartGame(int partNumber, int levelNumber)
     {
+        GameState = GameStates.Started;
+
         currentPart = parts[partNumber - 1];
 
         List<Level> levels = new List<Level>();
         levels.AddRange(currentPart.GetComponentsInChildren<Level>(true));
 
-        //currentLevel = null;
         currentLevel = levels.Find(level => level.Number == levelNumber);
         currentLevel.gameObject.SetActive(true);
-        currentLevel.Initiate(ball);
+        currentLevel.Initiate();
 
         levelSelectInterface.SetActive(false);
 
         inPlayInterface.SetActive(true);
 
         GameState = GameStates.Playing;
-        //OnGameStateChanged?.Invoke(GameState);
     }
 
     private void PauseGame()
@@ -82,6 +82,16 @@ public class GameManager : MonoBehaviour
         inPlayInterface.SetActive(false);
 
         GameState = GameStates.Paused;
-        //OnGameStateChanged?.Invoke(GameState);
+    }
+
+    private void RestartingGame()
+    {
+        GameState = GameStates.Restarting;
+        currentLevel.Restart(restartTimeInSec);
+    }
+
+    private void RestartGame()
+    {
+        GameState = GameStates.Playing;
     }
 }
